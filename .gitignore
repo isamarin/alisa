@@ -1,0 +1,11 @@
+# common, PHPStorm
+.DS_Store
+.idea/*
+Thumbs.db
+
+*.sql
+
+# site
+*
+!readme.html
+!.gitignore

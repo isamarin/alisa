@@ -9,3 +9,6 @@ Thumbs.db
 *
 !readme.html
 !.gitignore
+!src
+!tests
+!package.json

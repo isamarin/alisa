@@ -41,11 +41,5 @@
         }
       }
     }
-  ],
-  "extra": {
-    "branch-alias": {
-      "dev-master": "dev-master",
-      "master":"master"
-    }
-  }
+  ]
 }

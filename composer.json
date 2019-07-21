@@ -7,6 +7,20 @@
       "email": "mako.mmw@gmail.com"
     }
   ],
+  "type": "library",
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "phpmorphy/dicts",
+        "version": "1",
+        "dist": {
+          "url": "https://sourceforge.net/projects/phpmorphy/files/phpmorphy-dictionaries/0.3.x/ru_RU/morphy-0.3.x-ru_RU-withjo-utf-8.zip/download",
+          "type": "zip"
+        }
+      }
+    }
+  ],
   "require": {
     "nqxcode/phpmorphy": "^1.0",
     "ext-mysqli": "*",
@@ -28,18 +42,5 @@
         "src/Alisa/Traits"
       ]
     }
-  },
-  "repositories": [
-    {
-      "type": "package",
-      "package": {
-        "name": "phpmorphy/dicts",
-        "version": "1",
-        "dist": {
-          "url": "https://sourceforge.net/projects/phpmorphy/files/phpmorphy-dictionaries/0.3.x/ru_RU/morphy-0.3.x-ru_RU-withjo-utf-8.zip/download",
-          "type": "zip"
-        }
-      }
-    }
-  ]
+  }
 }

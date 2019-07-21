@@ -13,3 +13,5 @@ Thumbs.db
 !/tests
 !/src/**
 !/tests/**
+!/composer.json
+!/.gitignore

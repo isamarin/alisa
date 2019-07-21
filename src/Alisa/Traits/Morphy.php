@@ -21,7 +21,7 @@ Trait Morphy
      */
     public function convertToBaseForm(array $words): array
     {
-        $morphy = new phpMorphy(new phpMorphy_FilesBundle(__DIR__ . '/../../../data/dictionary/', 'rus'), [
+        $morphy = new phpMorphy(new phpMorphy_FilesBundle($_SERVER['DOCUMENT_ROOT'] .  '/../vendor/phpmorphy/dicts/', 'rus'), [
             'storage' => PHPMORPHY_STORAGE_FILE,
             'with_gramtab' => false,
             'predict_by_suffix' => true,

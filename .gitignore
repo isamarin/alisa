@@ -12,3 +12,4 @@ Thumbs.db
 !src
 !tests
 !package.json
+!/package.json

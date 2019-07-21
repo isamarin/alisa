@@ -104,6 +104,7 @@ class Trigger
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
      * @param bool $mistake
+     * @return bool
      */
 //    public function setAsMistake(bool $mistake = true)
 //    {

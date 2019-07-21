@@ -6,8 +6,8 @@ use ReflectionClass;
 
 abstract class RecognizedType
 {
-    const MORPHY_STRICT = 0;
-    const DAMERAU_LEVENSHTEIN_DISTANCE = 1;
+    public const MORPHY_STRICT = 0;
+    public const DAMERAU_LEVENSHTEIN_DISTANCE = 1;
 
     public static function getConstants(): array
     {

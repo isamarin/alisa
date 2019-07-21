@@ -49,7 +49,7 @@ class Button
     /**
      * @param bool $hide
      */
-    public function setHide(bool $hide = false)
+    public function setHide(bool $hide)
     {
         $this->hide = $hide;
     }

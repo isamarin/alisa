@@ -7,7 +7,6 @@
       "email": "mako.mmw@gmail.com"
     }
   ],
-  "minimum-stability": "dev",
   "require": {
     "nqxcode/phpmorphy": "^1.0",
     "ext-mysqli": "*",

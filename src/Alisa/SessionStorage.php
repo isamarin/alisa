@@ -39,7 +39,7 @@ class SessionStorage
             $this->data = json_decode(file_get_contents($this->file), true);
         } else {
             $this->data[self::SESSION][$this->request->getMessageID()][self::REQUEST] = serialize($this->request);
-            file_put_contents($this->file, '');
+            $this->save();
         }
     }
 

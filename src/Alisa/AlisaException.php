@@ -3,7 +3,6 @@
 namespace isamarin\Alisa;
 
 use Exception;
-use Throwable;
 
 class AlisaException extends Exception
 {
@@ -12,7 +11,7 @@ class AlisaException extends Exception
     protected $file;
     protected $line;
 
-    public function __construct($message = '', $code = 0, Throwable $previous = null)
+    public function __construct($message = '', $code = 0)
     {
         if ( ! $message) {
             throw new $this('Unknown ' . get_class($this));

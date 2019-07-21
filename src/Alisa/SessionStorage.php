@@ -4,11 +4,11 @@ namespace isamarin\Alisa;
 
 class SessionStorage
 {
-    const TRIGGER = 'trigger';
-    const SESSION = 'sessions';
-    const REQUEST = 'request';
-    const COMMON = 'common';
-    const ALLOWED = 'allowed_class';
+    protected const TRIGGER = 'trigger';
+    protected const SESSION = 'sessions';
+    protected const REQUEST = 'request';
+    protected const COMMON = 'common';
+    protected const ALLOWED = 'allowed_class';
     protected $dir;
     /**
      * @var Request $request
@@ -32,7 +32,7 @@ class SessionStorage
         }
     }
 
-    protected function getData()
+    protected function getData(): void
     {
         $this->file = $this->dir . DIRECTORY_SEPARATOR . $this->request->getSessionID() . '.json';
         if (file_exists($this->file)) {
@@ -43,12 +43,12 @@ class SessionStorage
         }
     }
 
-    public function storeTrigger(Trigger $trigger)
+    public function storeTrigger(Trigger $trigger): void
     {
         $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = serialize($trigger);
     }
 
-    public function setItem($key, $item)
+    public function setItem($key, $item): void
     {
         $this->data['common'][$key] = $item;
     }
@@ -97,7 +97,7 @@ class SessionStorage
         return true;
     }
 
-    public function save()
+    public function save(): void
     {
         file_put_contents($this->file, json_encode($this->data));
     }

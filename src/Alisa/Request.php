@@ -12,9 +12,9 @@ namespace isamarin\Alisa;
  */
 class Request implements Interfaces\RequestInterface
 {
-    const SESSION = 'session';
-    const REQUEST = 'request';
-    const VERSION = '1.0';
+    protected const SESSION = 'session';
+    protected const REQUEST = 'request';
+    protected const VERSION = '1.0';
     private static $session_id;
     private static $client_id;
     private static $message_id;

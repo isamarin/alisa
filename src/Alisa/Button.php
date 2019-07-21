@@ -29,7 +29,7 @@ class Button
      * Устанавливает URL к кнопке
      * @param string $link
      */
-    public function addLink(string $link)
+    public function addLink(string $link): void
     {
         if ($link && filter_var($link, FILTER_VALIDATE_URL)) {
             $this->link = $link;
@@ -39,7 +39,7 @@ class Button
     /**
      * @param string $title
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): void
     {
         if ($title) {
             $this->title = $title;
@@ -49,7 +49,7 @@ class Button
     /**
      * @param bool $hide
      */
-    public function setHide(bool $hide)
+    public function setHide(bool $hide): void
     {
         $this->hide = $hide;
     }
@@ -57,8 +57,9 @@ class Button
     /**
      * Связывает триггер, который сработает при нажатии на кнопку
      * @param Trigger $trigger
+     * @param null $data
      */
-    public function linkTrigger(Trigger $trigger, $data = null)
+    public function linkTrigger(Trigger $trigger, $data = null): void
     {
         if ($trigger->isValid()) {
             $this->trigger['NAME'] = $trigger->getName();

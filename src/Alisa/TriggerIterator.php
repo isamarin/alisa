@@ -9,7 +9,7 @@ class TriggerIterator implements Iterator
     protected $position;
     protected $array;
 
-    public function append(Trigger $command)
+    public function append(Trigger $command): void
     {
         $this->array[] = $command;
     }
@@ -19,7 +19,7 @@ class TriggerIterator implements Iterator
         $this->position = 0;
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         $this->position = 0;
     }
@@ -34,7 +34,7 @@ class TriggerIterator implements Iterator
         return $this->position;
     }
 
-    public function next()
+    public function next(): void
     {
         ++$this->position;
     }
@@ -46,7 +46,7 @@ class TriggerIterator implements Iterator
 
     public function getByName($name)
     {
-        foreach ($this->array as $key => $trigger) {
+        foreach ($this->array as $trigger) {
             /** @var Trigger $trigger */
             if ($trigger->getName() === strtoupper($name)) {
                 return $trigger;

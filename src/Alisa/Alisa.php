@@ -47,7 +47,7 @@ class Alisa
      * @param int $RecognizedType
      * @see RecognizedType
      */
-    public function setRecognizedAlgorithm(int $RecognizedType)
+    public function setRecognizedAlgorithm(int $RecognizedType): void
     {
         if (in_array($RecognizedType, RecognizedType::getConstants(), true)) {
             $this->recognizedType = $RecognizedType;
@@ -59,7 +59,7 @@ class Alisa
      * Устанавливает триггер по-умолчанию
      * @param Trigger $trigger
      */
-    public function setDefaultCommand(Trigger $trigger)
+    public function setDefaultCommand(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->defaultCommand = $trigger;
@@ -69,7 +69,7 @@ class Alisa
     /**
      * @param Trigger $trigger
      */
-    public function setHelloCommand(Trigger $trigger)
+    public function setHelloCommand(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->helloCommand = $trigger;
@@ -79,7 +79,7 @@ class Alisa
     /**
      * @param Trigger $trigger
      */
-    public function setMistakeCommand(Trigger $trigger)
+    public function setMistakeCommand(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->mistakeTrigger = $trigger;
@@ -198,19 +198,19 @@ class Alisa
     /**
      * @param Trigger ...$trigger
      */
-    public function addCommand(Trigger ... $trigger)
+    public function addCommand(Trigger ... $trigger): void
     {
         foreach ($trigger as $tr) {
             if ($tr->isValid()) {
                 if ($this->defaultCommand && ! $tr->hasNextTrigger()) {
-                    $tr->setNext($this->defaultCommand);
+                    $tr->setNextTrigger($this->defaultCommand);
                 }
                 $this->triggers->append($tr);
             }
         }
     }
 
-    public function sendResponse(Trigger $command, callable $func)
+    public function sendResponse(Trigger $command, callable $func): void
     {
         if ($command === $this->recognizedCommand) {
             /** @var Response $answer */
@@ -222,7 +222,7 @@ class Alisa
         }
     }
 
-    public function storeCommonData($data, $key)
+    public function storeCommonData($data, $key): void
     {
         $this->storage->setItem($key, $data);
 

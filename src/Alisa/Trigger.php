@@ -22,7 +22,7 @@ class Trigger
      * Устаналивает группу слов синонимов
      * @param array ...$tokens
      */
-    public function addTokens(array ...$tokens)
+    public function addTokens(array ...$tokens): void
     {
         foreach ($tokens as $tokenGroup) {
             $out = [];
@@ -47,14 +47,14 @@ class Trigger
      * или адрес
      * @param Trigger $next
      */
-    public function setNextTrigger(Trigger $next)
+    public function setNextTrigger(Trigger $next): void
     {
         if ($next->isValid()) {
             $this->next = $next;
         }
     }
 
-    public function setStoreData(bool $shouldStore)
+    public function setStoreData(bool $shouldStore): void
     {
         $this->storeData = $shouldStore;
     }
@@ -103,7 +103,6 @@ class Trigger
 
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
-     * @param bool $mistake
      * @return bool
      */
 //    public function setAsMistake(bool $mistake = true)

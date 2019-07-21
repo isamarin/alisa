@@ -11,5 +11,4 @@ Thumbs.db
 !.gitignore
 !src
 !tests
-!package.json
-!/package.json
+!composer.json

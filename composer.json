@@ -1,0 +1,45 @@
+{
+  "name": "isamarin/alisa",
+  "description": "YandexAlisa PHP Bot",
+  "authors": [
+    {
+      "name": "Igor Samarin",
+      "email": "mako.mmw@gmail.com"
+    }
+  ],
+  "require": {
+    "nqxcode/phpmorphy": "^1.0",
+    "ext-mysqli": "*",
+    "oefenweb/damerau-levenshtein": "3.0.*",
+    "phpmorphy/dicts": "^1",
+    "php": "^7.1",
+    "ext-json": "*",
+    "ext-mbstring": "*",
+    "ext-curl": "*",
+    "ext-openssl": "*",
+    "phpunit/phpunit": "^7.5",
+    "ext-zip": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "isamarin\\Alisa\\": [
+        "src/Alisa/",
+        "src/Alisa/Interfaces",
+        "src/Alisa/Traits"
+      ]
+    }
+  },
+  "repositories": [
+    {
+      "type": "package",
+      "package": {
+        "name": "phpmorphy/dicts",
+        "version": "1",
+        "dist": {
+          "url": "https://sourceforge.net/projects/phpmorphy/files/phpmorphy-dictionaries/0.3.x/ru_RU/morphy-0.3.x-ru_RU-withjo-utf-8.zip/download",
+          "type": "zip"
+        }
+      }
+    }
+  ]
+}

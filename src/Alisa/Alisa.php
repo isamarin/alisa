@@ -112,7 +112,13 @@ class Alisa
         }
 
         /* Мб нам несут данные? */
-        if ($prev = $this->storage->getPreviousRequest()['NAME']) {
+        /**
+         * TODO
+         * здесь что то пошло не так, и используется какая то странная логика.
+         * временный хотфикс
+         * проблема связана с новым хранилищем сессий
+         */
+        if ($prev = $this->storage->getPreviousTrigger()->getName()) {
             $_previousCommand = $this->triggers->getByName($prev);
             if ($_previousCommand->isStoreData() && $_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();

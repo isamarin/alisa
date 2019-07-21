@@ -61,7 +61,7 @@ class SessionStorage
         return null;
     }
 
-    public function getPreviousRequest()
+    public function getPreviousRequest(): Request
     {
         if ($this->request->getMessageID() !== 0) {
             return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST],
@@ -70,7 +70,7 @@ class SessionStorage
         return $this->request;
     }
 
-    public function getPreviousTrigger()
+    public function getPreviousTrigger():Trigger
     {
         if ($this->request->getMessageID() !== 0) {
             return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER],

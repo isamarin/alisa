@@ -1,7 +1,9 @@
 <?php
 
-namespace isamarin\Alisa\Traits;
+namespace isamarin\Alisa;
 
+use isamarin\Alisa\Interfaces\RecognitionInterface;
+use isamarin\Alisa\Traits\Morphy;
 use Oefenweb\DamerauLevenshtein\DamerauLevenshtein;
 
 class DistanceRecognition implements RecognitionInterface

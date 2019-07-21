@@ -70,7 +70,7 @@ class SessionStorage
         return $this->request;
     }
 
-    public function getPreviousTrigger():Trigger
+    public function getPreviousTrigger(): Trigger
     {
         if ($this->request->getMessageID() !== 0) {
             return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER],
@@ -99,6 +99,15 @@ class SessionStorage
 
     public function save(): void
     {
+        /**
+         * TODO
+         * неверная очередность триггеров и реквестов
+         */
         file_put_contents($this->file, json_encode($this->data));
+    }
+
+    public function _asArray(): array
+    {
+        return (array)$this->data;
     }
 }

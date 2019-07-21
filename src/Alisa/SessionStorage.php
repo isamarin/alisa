@@ -97,13 +97,8 @@ class SessionStorage
         return true;
     }
 
-    public function clear()
+    public function save()
     {
-
-    }
-
-    protected function save()
-    {
-
+        file_put_contents($this->file, json_encode($this->data));
     }
 }

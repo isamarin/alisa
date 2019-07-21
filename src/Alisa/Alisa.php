@@ -218,7 +218,7 @@ class Alisa
             $response = $this->request->getServiceData();
             $response['response'] = $answer->send();
             print json_encode($response);
-            $this->storage->clear();
+            $this->storage->save();
         }
     }
 

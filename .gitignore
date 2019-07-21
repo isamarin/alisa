@@ -2,13 +2,14 @@
 .DS_Store
 .idea/*
 Thumbs.db
-
 *.sql
-
 # site
-*
 !readme.html
 !.gitignore
-!src
 !tests
 !composer.json
+*
+!/src
+!/tests
+!/src/**
+!/tests/**

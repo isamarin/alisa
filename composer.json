@@ -8,12 +8,13 @@
     }
   ],
   "type": "library",
+  "version": "v.1.0-BETA",
   "repositories": [
     {
       "type": "package",
       "package": {
         "name": "phpmorphy/dicts",
-        "version": "v.1.0-BETA",
+        "version": "1",
         "dist": {
           "url": "https://sourceforge.net/projects/phpmorphy/files/phpmorphy-dictionaries/0.3.x/ru_RU/morphy-0.3.x-ru_RU-withjo-utf-8.zip/download",
           "type": "zip"

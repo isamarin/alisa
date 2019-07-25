@@ -135,8 +135,7 @@ class Alisa
             }
         }
 
-        if ($command = $this->recognizeCommand()) {
-            $this->recognizedCommand = $command;
+        if ($this->recognizeCommand()) {
             $this->storage->storeTrigger($this->recognizedCommand);
             return true;
         }
@@ -179,6 +178,7 @@ class Alisa
             $this->recognizedCommand = $this->triggers->getByName(key($results));
             return true;
         }
+        $this->recognizedCommand = $this->mistakeTrigger;
 
         return false;
     }

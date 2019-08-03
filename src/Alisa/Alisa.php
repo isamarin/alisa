@@ -59,7 +59,7 @@ class Alisa
      * Устанавливает триггер по-умолчанию
      * @param Trigger $trigger
      */
-    public function setDefaultCommand(Trigger $trigger): void
+    public function setDefaultTrigger(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->defaultCommand = $trigger;
@@ -71,7 +71,7 @@ class Alisa
     /**
      * @param Trigger $trigger
      */
-    public function setHelloCommand(Trigger $trigger): void
+    public function setHelloTrigger(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->helloCommand = $trigger;
@@ -83,7 +83,7 @@ class Alisa
     /**
      * @param Trigger $trigger
      */
-    public function setMistakeCommand(Trigger $trigger): void
+    public function setMistakeTrigger(Trigger $trigger): void
     {
         if ($trigger->isValid()) {
             $this->mistakeTrigger = $trigger;
@@ -211,7 +211,7 @@ class Alisa
     /**
      * @param Trigger ...$trigger
      */
-    public function addCommand(Trigger ... $trigger): void
+    public function addTrigger(Trigger ... $trigger): void
     {
         foreach ($trigger as $tr) {
             if ($tr->isValid()) {
@@ -223,7 +223,7 @@ class Alisa
         }
     }
 
-    public function sendResponse(Trigger $command, callable $func): void
+    public function sendResponse(Trigger $trigger, callable $func): void
     {
 
         if (!isset($this->helloCommand,$this->defaultCommand,$this->mistakeTrigger)){
@@ -238,7 +238,7 @@ class Alisa
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
-        if ($command === $this->recognizedCommand) {
+        if ($trigger === $this->recognizedCommand) {
             /** @var Response $answer */
             $answer = $func();
             $response = $this->request->getServiceData();

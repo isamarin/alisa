@@ -8,7 +8,7 @@
     }
   ],
   "type": "library",
-  "version": "v1.9-BETA",
+  "version": "1.13-dev",
   "repositories": [
     {
       "type": "package",

@@ -63,6 +63,8 @@ class Alisa
     {
         if ($trigger->isValid()) {
             $this->defaultCommand = $trigger;
+        } else {
+            trigger_error('Некорректный триггер');
         }
     }
 
@@ -73,6 +75,8 @@ class Alisa
     {
         if ($trigger->isValid()) {
             $this->helloCommand = $trigger;
+        } else {
+            trigger_error('Некорректный триггер');
         }
     }
 
@@ -83,6 +87,8 @@ class Alisa
     {
         if ($trigger->isValid()) {
             $this->mistakeTrigger = $trigger;
+        } else {
+            trigger_error('Некорректный триггер');
         }
     }
 
@@ -96,7 +102,7 @@ class Alisa
      * TODO
      * reduce returns
      */
-    public function getCommand(): bool
+    protected function getCommand(): bool
     {
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
@@ -150,6 +156,7 @@ class Alisa
         return false;
 
     }
+
 
     protected function recognizeCommand(): bool
     {
@@ -218,6 +225,19 @@ class Alisa
 
     public function sendResponse(Trigger $command, callable $func): void
     {
+
+        if (!isset($this->helloCommand,$this->defaultCommand,$this->mistakeTrigger)){
+            $answer = new Response();
+            $answer->addText('Бот запущен, но не настроены стандартные триггеры');
+            $response = $this->request->getServiceData();
+            $response['response'] = $answer->send();
+            print json_encode($response);
+            die();
+        }
+
+        if ( ! $this->recognizedCommand) {
+            $this->getCommand();
+        }
         if ($command === $this->recognizedCommand) {
             /** @var Response $answer */
             $answer = $func();
@@ -227,6 +247,7 @@ class Alisa
             $this->storage->save();
         }
     }
+
 
     public function storeCommonData($data, $key): void
     {

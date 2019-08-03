@@ -10,9 +10,6 @@ class TriggerTest extends TestCase
     {
         $trigger = new Trigger('test');
         $trigger->addTokens(['ONE'], ['TWO'], ['THREE']);
-        $trigger->setAsDefault();
-        $trigger->setAsMistake();
-        $trigger->setAsInit();
         $this->assertEquals('TEST', $trigger->getName());
         $this->assertEquals([['ONE'], ['TWO'], ['THREE']],
             $trigger->getWords());

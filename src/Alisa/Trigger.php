@@ -7,7 +7,7 @@ class Trigger
     private $name;
     /** @var Trigger $next */
     private $next = false;
-    protected $words;
+    protected $words = [];
     private $storeData = false;
     protected $default = false;
     protected $mistake = false;
@@ -36,7 +36,6 @@ class Trigger
     public function getWords()
     {
         return $this->words;
-
     }
 
     /**

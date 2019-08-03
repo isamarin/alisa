@@ -8,7 +8,7 @@
     }
   ],
   "type": "library",
-  "version": "1.13-dev",
+  "version": "1.13.0-dev",
   "repositories": [
     {
       "type": "package",

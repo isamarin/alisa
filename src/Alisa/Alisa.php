@@ -225,16 +225,9 @@ class Alisa
 
     public function sendResponse(Trigger $trigger, callable $func): void
     {
-
         if (!isset($this->helloCommand,$this->defaultCommand,$this->mistakeTrigger)){
-            $answer = new Response();
-            $answer->addText('Бот запущен, но не настроены стандартные триггеры');
-            $response = $this->request->getServiceData();
-            $response['response'] = $answer->send();
-            print json_encode($response);
-            die();
+          $this->sendHelp();
         }
-
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
@@ -246,6 +239,26 @@ class Alisa
             print json_encode($response);
             $this->storage->save();
         }
+    }
+
+    protected function sendHelp():void {
+        $answer = new Response();
+        $answer->addText('Приветствую! Бот запущен, но не настроены стандратные триггеры.');
+
+        $button = new Button('Что такое стандартные триггеры?');
+        $button->addLink('https://github.com/isamarin/alisa/tree/master#стандартные-триггеры');
+        $button->setHide(true);
+
+        $button2 = new Button('Посмотреть пример реализации');
+        $button2->addLink('');
+        $button2->setHide(true);
+
+
+        $answer->addButton($button,$button2);
+        $response = $this->request->getServiceData();
+        $response['response'] = $answer->send();
+        print json_encode($response);
+        die();
     }
 
 

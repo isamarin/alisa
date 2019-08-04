@@ -20,7 +20,7 @@ class MorphyRecognition implements RecognitionInterface
     {
         $requestWords = $this->convertToBaseForm($request->getWords());
         $triggerWords = $trigger->getWords();
-        if (count($triggerWords)){
+        if (count($triggerWords)) {
             foreach ($triggerWords as $level) {
                 $levelWords = $this->convertToBaseForm($level);
                 if ( ! $this->compare($requestWords, $levelWords)) {

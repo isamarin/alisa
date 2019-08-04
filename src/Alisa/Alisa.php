@@ -27,6 +27,8 @@ class Alisa
 
     protected $recognizedType;
 
+    protected $directionType;
+
 
     /**
      * Alisa constructor.
@@ -40,6 +42,7 @@ class Alisa
         $this->triggers = new TriggerIterator();
         $this->storage = new SessionStorage($this->request);
         $this->recognizedType = RecognizedType::MORPHY_STRICT;
+        $this->directionType = DirectionType::BACKWARD;
 
     }
 
@@ -201,7 +204,7 @@ class Alisa
      * @param string $triggerName
      * @return mixed
      */
-    public function getStoredCommandData(string $triggerName)
+    public function getTriggerData(string $triggerName)
     {
         return $this->storage->getItem($triggerName);
     }
@@ -245,7 +248,7 @@ class Alisa
         $this->init();
     }
 
-    protected function init():void
+    protected function init(): void
     {
         if ( ! isset($this->helloCommand, $this->defaultCommand, $this->mistakeTrigger)) {
             $this->sendHelp();
@@ -254,8 +257,27 @@ class Alisa
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
-        $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
-        $this->storage->save();
+
+        if ( ! $this->request->isNewSession()) {
+            if ($this->directionType === DirectionType::FORWARD) {
+                $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
+            } else {
+                $this->storage->setItem($this->storage->getPreviousTrigger()->getName(),
+                    $this->request->getUtterance());
+            }
+            $this->storage->save();
+        }
+    }
+
+    /**
+     *
+     * @param $direction
+     */
+    public function setTriggerDataDirection($direction): void
+    {
+        if (in_array($direction, DirectionType::getConstants(), true)) {
+            $this->directionType = $direction;
+        }
     }
 
     public function sendResponse(Trigger $trigger, callable $func): void

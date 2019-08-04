@@ -23,7 +23,6 @@ Trait Morphy
     {
 
 
-
         $morphy = new phpMorphy(new phpMorphy_FilesBundle($_SERVER['DOCUMENT_ROOT'] . '/../vendor/phpmorphy/dicts/',
             'rus'), [
             'storage' => PHPMORPHY_STORAGE_FILE,

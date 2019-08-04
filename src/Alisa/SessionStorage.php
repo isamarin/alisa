@@ -64,7 +64,8 @@ class SessionStorage
     public function getPreviousRequest(): Request
     {
         if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST]);
+            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST],
+                [self::ALLOWED => ['Request']]);
         }
         return $this->request;
     }
@@ -72,8 +73,8 @@ class SessionStorage
     public function getPreviousTrigger(): Trigger
     {
         if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER]);
-                //[self::ALLOWED => [get_class(Trigger::class)]]);
+            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER],
+                [self::ALLOWED => ['Trigger']]);
         }
         return null;
     }
@@ -82,7 +83,7 @@ class SessionStorage
     {
         if (array_key_exists($messageID, $this->data[self::SESSION])) {
             return unserialize($this->data[self::SESSION][$messageID][self::TRIGGER],
-                [self::ALLOWED => [get_class(Trigger::class)]]);
+                [self::ALLOWED => ['Trigger']]);
         }
         return null;
     }

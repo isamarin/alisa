@@ -23,7 +23,7 @@ class Trigger
      * @param array ...$tokens
      * @return Trigger
      */
-    public function addTokens(array ...$tokens)
+    public function addTokens(array ...$tokens): Trigger
     {
         foreach ($tokens as $tokenGroup) {
             $out = [];
@@ -47,6 +47,7 @@ class Trigger
      * тк запрос принимаемый от пользователя является какими-либо данными, например имя
      * или адрес
      * @param Trigger $next
+     * @return Trigger
      */
     public function setNextTrigger(Trigger $next): Trigger
     {
@@ -57,8 +58,8 @@ class Trigger
     }
 
     /**
-     * @deprecated
      * @param bool $shouldStore
+     * @deprecated
      */
     public function setStoreData(bool $shouldStore): void
     {
@@ -91,6 +92,7 @@ class Trigger
     /**
      * Устанавливает триггер, срабатывающий по умолчанию
      * @param bool $default
+     * @return Trigger
      */
     public function setAsDefault(bool $default = true): Trigger
     {
@@ -102,8 +104,8 @@ class Trigger
     /**
      * Устанавливает данный триггер как стартовый
      * @param bool $start
-     * @see Request::isNewSession()
      * @return Trigger
+     * @see Request::isNewSession()
      */
     public function setAsInit(bool $start = true): Trigger
     {

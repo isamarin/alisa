@@ -17,3 +17,4 @@ Thumbs.db
 !/.gitignore
 !/composer.lock
 /composer.lock
+/README.md

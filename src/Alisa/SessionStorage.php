@@ -99,10 +99,6 @@ class SessionStorage
 
     public function save(): void
     {
-        /**
-         * TODO
-         * неверная очередность триггеров и реквестов
-         */
         file_put_contents($this->file, json_encode($this->data));
     }
 

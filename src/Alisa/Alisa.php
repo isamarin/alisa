@@ -57,9 +57,9 @@ class Alisa
 
     /**
      * Устанавливает триггер по-умолчанию
-     * @deprecated
-     * @see Trigger::setAsDefault()
      * @param Trigger $trigger
+     * @see Trigger::setAsDefault()
+     * @deprecated
      */
     public function setDefaultTrigger(Trigger $trigger): void
     {
@@ -71,9 +71,9 @@ class Alisa
     }
 
     /**
-     * @deprecated
-     * @see Trigger::setAsInit()
      * @param Trigger $trigger
+     * @see Trigger::setAsInit()
+     * @deprecated
      */
     public function setHelloTrigger(Trigger $trigger): void
     {
@@ -85,9 +85,9 @@ class Alisa
     }
 
     /**
-     * @deprecated
-     * @see Trigger::setAsMistake()
      * @param Trigger $trigger
+     * @see Trigger::setAsMistake()
+     * @deprecated
      */
     public function setMistakeTrigger(Trigger $trigger): void
     {
@@ -223,17 +223,17 @@ class Alisa
     {
         foreach ($trigger as $tr) {
             if ($tr->isValid()) {
-                if ($tr->isMistake()){
+                if ($tr->isMistake()) {
                     $this->mistakeTrigger = $tr;
-                 //   continue;
+                    //   continue;
                 }
-                if ($tr->isDefault()){
+                if ($tr->isDefault()) {
                     $this->defaultCommand = $tr;
-                   // continue;
+                    // continue;
                 }
-                if ($tr->isInit()){
+                if ($tr->isInit()) {
                     $this->helloCommand = $tr;
-                 //   continue;
+                    //   continue;
                 }
                 if ($this->defaultCommand && ! $tr->hasNextTrigger()) {
                     $tr->setNextTrigger($this->defaultCommand);
@@ -243,14 +243,22 @@ class Alisa
         }
     }
 
-    public function sendResponse(Trigger $trigger, callable $func): void
+    public function init()
     {
-        if (!isset($this->helloCommand,$this->defaultCommand,$this->mistakeTrigger)){
-          $this->sendHelp();
+        if ( ! isset($this->helloCommand, $this->defaultCommand, $this->mistakeTrigger)) {
+            $this->sendHelp();
         }
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
+        if ($this->recognizedCommand->isStoreData()){
+            $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
+        }
+    }
+
+    public function sendResponse(Trigger $trigger, callable $func): void
+    {
+
         if ($trigger === $this->recognizedCommand) {
             /** @var Response $answer */
             $answer = $func();
@@ -261,7 +269,8 @@ class Alisa
         }
     }
 
-    protected function sendHelp():void {
+    protected function sendHelp(): void
+    {
         $answer = new Response();
         $answer->addText('Приветствую! Бот запущен, но не настроены стандратные триггеры.');
 
@@ -274,7 +283,7 @@ class Alisa
         $button2->setHide(true);
 
 
-        $answer->addButton($button,$button2);
+        $answer->addButton($button, $button2);
         $response = $this->request->getServiceData();
         $response['response'] = $answer->send();
         print json_encode($response);

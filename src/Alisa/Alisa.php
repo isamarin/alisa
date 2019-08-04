@@ -57,6 +57,8 @@ class Alisa
 
     /**
      * Устанавливает триггер по-умолчанию
+     * @deprecated
+     * @see Trigger::setAsDefault()
      * @param Trigger $trigger
      */
     public function setDefaultTrigger(Trigger $trigger): void
@@ -69,6 +71,8 @@ class Alisa
     }
 
     /**
+     * @deprecated
+     * @see Trigger::setAsInit()
      * @param Trigger $trigger
      */
     public function setHelloTrigger(Trigger $trigger): void
@@ -81,6 +85,8 @@ class Alisa
     }
 
     /**
+     * @deprecated
+     * @see Trigger::setAsMistake()
      * @param Trigger $trigger
      */
     public function setMistakeTrigger(Trigger $trigger): void
@@ -215,6 +221,18 @@ class Alisa
     {
         foreach ($trigger as $tr) {
             if ($tr->isValid()) {
+                if ($tr->isMistake()){
+                    $this->mistakeTrigger = $tr;
+                    continue;
+                }
+                if ($tr->isDefault()){
+                    $this->defaultCommand = $tr;
+                    continue;
+                }
+                if ($tr->isInit()){
+                    $this->helloCommand = $tr;
+                    continue;
+                }
                 if ($this->defaultCommand && ! $tr->hasNextTrigger()) {
                     $tr->setNextTrigger($this->defaultCommand);
                 }

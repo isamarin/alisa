@@ -82,32 +82,30 @@ class Trigger
      * Устанавливает триггер, срабатывающий по умолчанию
      * @param bool $default
      */
-//    public function setAsDefault(bool $default = true)
-//    {
-//        $this->default = $default;
-//
-//    }
+    public function setAsDefault(bool $default = true)
+    {
+        $this->default = $default;
+
+    }
 
     /**
      * Устанавливает данный триггер как стартовый
      * @param bool $start
      * @see Request::isNewSession()
      */
-//    public function setAsInit(bool $start = true)
-//    {
-//
-//        $this->start = $start;
-//
-//    }
+    public function setAsInit(bool $start = true)
+    {
+        $this->start = $start;
+    }
 
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
      * @return bool
      */
-//    public function setAsMistake(bool $mistake = true)
-//    {
-//        $this->mistake = $mistake;
-//    }
+    public function setAsMistake(bool $mistake = true):bool
+    {
+        $this->mistake = $mistake;
+    }
 
     public function isDefault(): bool
     {

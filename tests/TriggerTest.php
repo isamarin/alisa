@@ -9,10 +9,10 @@ class TriggerTest extends TestCase
     public function testNormal()
     {
         $trigger = new Trigger('test');
-        $trigger->addTokens(['ONE'], ['TWO'], ['THREE']);
+        $trigger->linkTokens(['ONE'], ['TWO'], ['THREE']);
         $this->assertEquals('TEST', $trigger->getName());
         $this->assertEquals([['ONE'], ['TWO'], ['THREE']],
-            $trigger->getWords());
+            $trigger->getTokens());
         $this->assertEquals(true, $trigger->isValid());
         $this->assertEquals(true, $trigger->isDefault());
         $this->assertEquals(false, $trigger->isMistake());

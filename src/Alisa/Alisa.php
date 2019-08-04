@@ -239,7 +239,7 @@ class Alisa
                     //   continue;
                 }
                 if ($this->defaultCommand && ! $tr->hasNextTrigger() && $this->defaultCommand->getName() !== $tr->getName()) {
-                    $tr->setNextTrigger($this->defaultCommand);
+                    $tr->nextDelegate($this->defaultCommand);
                 }
                 $this->triggers->append($tr);
             }

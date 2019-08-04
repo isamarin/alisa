@@ -19,7 +19,7 @@ class MorphyRecognition implements RecognitionInterface
     public function rateSimilarities(Request $request, Trigger $trigger): int
     {
         $requestWords = $this->convertToBaseForm($request->getWords());
-        $triggerWords = $trigger->getWords();
+        $triggerWords = $trigger->getTokens();
         if (count($triggerWords)) {
             foreach ($triggerWords as $level) {
                 $levelWords = $this->convertToBaseForm($level);

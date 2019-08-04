@@ -22,7 +22,7 @@ class DistanceRecognition implements RecognitionInterface
     public function rateSimilarities(Request $request, Trigger $trigger): int
     {
         $requestWordsString = implode(' ', $this->convertToBaseForm($request->getWords()));
-        $triggerWords = $trigger->getWords();
+        $triggerWords = $trigger->getTokens();
         $out = [];
         foreach ($triggerWords[0] as $level) {
             $_level = implode(' ', $this->convertToBaseForm(explode(' ', $level)));

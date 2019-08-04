@@ -8,7 +8,7 @@ class Trigger
     /** @var Trigger $next */
     private $next = false;
     protected $words = [];
-    private $storeData = false;
+    private $storeData = true;
     protected $default = false;
     protected $mistake = false;
     protected $start = false;
@@ -23,7 +23,7 @@ class Trigger
      * @param array ...$tokens
      * @return Trigger
      */
-    public function addTokens(array ...$tokens): Trigger
+    public function linkTokens(array ...$tokens): Trigger
     {
         foreach ($tokens as $tokenGroup) {
             $out = [];
@@ -35,7 +35,7 @@ class Trigger
         return $this;
     }
 
-    public function getWords(): array
+    public function getTokens(): array
     {
         return $this->words;
     }
@@ -49,7 +49,7 @@ class Trigger
      * @param Trigger $next
      * @return Trigger
      */
-    public function setNextTrigger(Trigger $next): Trigger
+    public function nextDelegate(Trigger $next): Trigger
     {
         if ($next->isValid()) {
             $this->next = $next;
@@ -58,6 +58,7 @@ class Trigger
     }
 
     /**
+     *  @version с 1.5.0-beta по умолчанию все триггеры сохраняют данные
      * @param bool $shouldStore
      * @deprecated
      */
@@ -67,6 +68,7 @@ class Trigger
     }
 
     /**
+     * @version с 1.5.0-beta по умолчанию все триггеры сохраняют данные
      * @deprecated
      */
     public function isStoreData(): bool
@@ -91,36 +93,36 @@ class Trigger
 
     /**
      * Устанавливает триггер, срабатывающий по умолчанию
-     * @param bool $default
+     * @param bool $isDefault
      * @return Trigger
      */
-    public function setAsDefault(bool $default = true): Trigger
+    public function setAsDefault(bool $isDefault = true): Trigger
     {
-        $this->default = $default;
+        $this->default = $isDefault;
         return $this;
 
     }
 
     /**
      * Устанавливает данный триггер как стартовый
-     * @param bool $start
+     * @param bool $isInit
      * @return Trigger
      * @see Request::isNewSession()
      */
-    public function setAsInit(bool $start = true): Trigger
+    public function setAsInit(bool $isInit = true): Trigger
     {
-        $this->start = $start;
+        $this->start = $isInit;
         return $this;
     }
 
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
-     * @param bool $mistake
+     * @param bool $isMistake
      * @return Trigger
      */
-    public function setAsMistake(bool $mistake = true): Trigger
+    public function setAsMistake(bool $isMistake = true): Trigger
     {
-        $this->mistake = $mistake;
+        $this->mistake = $isMistake;
         return $this;
     }
 

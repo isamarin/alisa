@@ -50,7 +50,7 @@ class SessionStorage
 
     public function setItem($key, $item): void
     {
-        $this->data['common'][$key] = $item;
+        $this->data[self::COMMON][$key] = $item;
     }
 
     public function getItem($key)
@@ -64,8 +64,7 @@ class SessionStorage
     public function getPreviousRequest(): Request
     {
         if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST],
-                [self::ALLOWED => [get_class(Request::class)]]);
+            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST]);
         }
         return $this->request;
     }
@@ -73,8 +72,8 @@ class SessionStorage
     public function getPreviousTrigger(): Trigger
     {
         if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER],
-                [self::ALLOWED => [get_class(Trigger::class)]]);
+            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER]);
+                //[self::ALLOWED => [get_class(Trigger::class)]]);
         }
         return null;
     }

@@ -198,12 +198,12 @@ class Alisa
 
 
     /**
-     * @param Trigger $command
+     * @param string $triggerName
      * @return mixed
      */
-    public function getStoredCommandData(Trigger $command)
+    public function getStoredCommandData(string $triggerName)
     {
-        return $this->storage->getItem($command->getName());
+        return $this->storage->getItem($triggerName);
     }
 
     /**
@@ -235,25 +235,27 @@ class Alisa
                     $this->helloCommand = $tr;
                     //   continue;
                 }
-                if ($this->defaultCommand && ! $tr->hasNextTrigger()) {
+                if ($this->defaultCommand && ! $tr->hasNextTrigger() && $this->defaultCommand->getName() !== $tr->getName()) {
                     $tr->setNextTrigger($this->defaultCommand);
                 }
                 $this->triggers->append($tr);
             }
         }
+
+        $this->init();
     }
 
-    public function init()
+    protected function init():void
     {
         if ( ! isset($this->helloCommand, $this->defaultCommand, $this->mistakeTrigger)) {
             $this->sendHelp();
+            die();
         }
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
-        if ($this->recognizedCommand->isStoreData()){
-            $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
-        }
+        $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
+        $this->storage->save();
     }
 
     public function sendResponse(Trigger $trigger, callable $func): void

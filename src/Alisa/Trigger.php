@@ -21,8 +21,9 @@ class Trigger
     /**
      * Устаналивает группу слов синонимов
      * @param array ...$tokens
+     * @return Trigger
      */
-    public function addTokens(array ...$tokens): void
+    public function addTokens(array ...$tokens)
     {
         foreach ($tokens as $tokenGroup) {
             $out = [];
@@ -31,6 +32,7 @@ class Trigger
             }
             $this->words[] = $out;
         }
+        return $this;
     }
 
     public function getWords(): array
@@ -46,18 +48,26 @@ class Trigger
      * или адрес
      * @param Trigger $next
      */
-    public function setNextTrigger(Trigger $next): void
+    public function setNextTrigger(Trigger $next): Trigger
     {
         if ($next->isValid()) {
             $this->next = $next;
         }
+        return $this;
     }
 
+    /**
+     * @deprecated
+     * @param bool $shouldStore
+     */
     public function setStoreData(bool $shouldStore): void
     {
         $this->storeData = $shouldStore;
     }
 
+    /**
+     * @deprecated
+     */
     public function isStoreData(): bool
     {
         return $this->storeData;
@@ -82,9 +92,10 @@ class Trigger
      * Устанавливает триггер, срабатывающий по умолчанию
      * @param bool $default
      */
-    public function setAsDefault(bool $default = true): void
+    public function setAsDefault(bool $default = true): Trigger
     {
         $this->default = $default;
+        return $this;
 
     }
 
@@ -92,19 +103,23 @@ class Trigger
      * Устанавливает данный триггер как стартовый
      * @param bool $start
      * @see Request::isNewSession()
+     * @return Trigger
      */
-    public function setAsInit(bool $start = true): void
+    public function setAsInit(bool $start = true): Trigger
     {
         $this->start = $start;
+        return $this;
     }
 
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
      * @param bool $mistake
+     * @return Trigger
      */
-    public function setAsMistake(bool $mistake = true): void
+    public function setAsMistake(bool $mistake = true): Trigger
     {
         $this->mistake = $mistake;
+        return $this;
     }
 
     public function isDefault(): bool

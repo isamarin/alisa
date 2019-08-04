@@ -9,7 +9,7 @@ namespace isamarin\Alisa;
 class Alisa
 {
     /** @var TriggerIterator $triggers */
-    protected $triggers;
+    protected $triggers = [];
     /** @var Trigger $recornizedCommand */
     protected $recognizedCommand;
     /** @var SessionStorage $storage */
@@ -216,6 +216,8 @@ class Alisa
 
     /**
      * @param Trigger ...$trigger
+     * TODO
+     * исправить работу итератора при пропуске дефолтных триггеров
      */
     public function addTrigger(Trigger ... $trigger): void
     {
@@ -223,15 +225,15 @@ class Alisa
             if ($tr->isValid()) {
                 if ($tr->isMistake()){
                     $this->mistakeTrigger = $tr;
-                    continue;
+                 //   continue;
                 }
                 if ($tr->isDefault()){
                     $this->defaultCommand = $tr;
-                    continue;
+                   // continue;
                 }
                 if ($tr->isInit()){
                     $this->helloCommand = $tr;
-                    continue;
+                 //   continue;
                 }
                 if ($this->defaultCommand && ! $tr->hasNextTrigger()) {
                     $tr->setNextTrigger($this->defaultCommand);

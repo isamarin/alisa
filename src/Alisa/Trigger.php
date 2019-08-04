@@ -33,7 +33,7 @@ class Trigger
         }
     }
 
-    public function getWords()
+    public function getWords(): array
     {
         return $this->words;
     }
@@ -82,7 +82,7 @@ class Trigger
      * Устанавливает триггер, срабатывающий по умолчанию
      * @param bool $default
      */
-    public function setAsDefault(bool $default = true)
+    public function setAsDefault(bool $default = true): void
     {
         $this->default = $default;
 
@@ -93,28 +93,28 @@ class Trigger
      * @param bool $start
      * @see Request::isNewSession()
      */
-    public function setAsInit(bool $start = true)
+    public function setAsInit(bool $start = true): void
     {
         $this->start = $start;
     }
 
     /**
      * Задействовать данный триггер, в случае если команда не была распознана ботом
-     * @return bool
+     * @param bool $mistake
      */
-    public function setAsMistake(bool $mistake = true):bool
+    public function setAsMistake(bool $mistake = true): void
     {
         $this->mistake = $mistake;
     }
 
     public function isDefault(): bool
     {
-        return $this->default;
+        return $this->default ? true : false;
     }
 
     public function isMistake(): bool
     {
-        return $this->mistake;
+        return $this->mistake ? true : false;
     }
 
     public function isInit(): bool

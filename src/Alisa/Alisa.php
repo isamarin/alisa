@@ -2,6 +2,8 @@
 
 namespace isamarin\Alisa;
 
+use isamarin\Alisa\Interfaces\RecognitionInterface;
+
 /**
  * Class Alisa
  * @package Alisa
@@ -29,6 +31,8 @@ class Alisa
 
     protected $directionType;
 
+    protected $alghoritm;
+
 
     /**
      * Alisa constructor.
@@ -43,6 +47,7 @@ class Alisa
         $this->storage = new SessionStorage($this->request);
         $this->recognizedType = RecognizedType::MORPHY_STRICT;
         $this->directionType = DirectionType::BACKWARD;
+        $this->alghoritm = new MorphyRecognition();
 
     }
 
@@ -55,6 +60,12 @@ class Alisa
         if (in_array($RecognizedType, RecognizedType::getConstants(), true)) {
             $this->recognizedType = $RecognizedType;
         }
+    }
+
+
+    public function setAlgorithm(RecognitionInterface $algorithm): void
+    {
+        $this->alghoritm = $algorithm;
     }
 
 

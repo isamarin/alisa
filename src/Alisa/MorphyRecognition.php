@@ -16,22 +16,30 @@ class MorphyRecognition implements RecognitionInterface
      * @param Trigger $trigger
      * @return int
      */
-    public function rateSimilarities(Request $request, Trigger $trigger): int
+    public function rateSimilarities(Request $request, TriggerIterator $iterator): Trigger
     {
-        $requestWords = $this->convertToBaseForm($request->getWords());
-        $triggerWords = $trigger->getTokens();
-        if (count($triggerWords)) {
-            foreach ($triggerWords as $level) {
-                $levelWords = $this->convertToBaseForm($level);
-                if ( ! $this->compare($requestWords, $levelWords)) {
-                    return 0;
+
+        foreach ($iterator as $trigger) {
+            $requestWords = $this->convertToBaseForm($request->getWords());
+            $triggerWords = $trigger->getTokens();
+            if (count($triggerWords)) {
+                foreach ($triggerWords as $level) {
+                    $levelWords = $this->convertToBaseForm($level);
+                    if ( ! $this->compare($requestWords, $levelWords)) {
+                        break 2;
+                    }
                 }
+                return $trigger;
             }
-            return 1;
         }
-        return 0;
+        return $iterator->getMistakeTrigger();
     }
 
+    /**
+     * @param $one
+     * @param $two
+     * @return bool
+     */
     protected function compare($one, $two): bool
     {
         foreach ($one as $w) {

@@ -19,7 +19,7 @@ class DistanceRecognition implements RecognitionInterface
      */
 
 
-    public function rateSimilarities(Request $request, Trigger $trigger): int
+    public function rateSimilarities(Request $request, TriggerIterator $trigger): Trigger
     {
         $requestWordsString = implode(' ', $this->convertToBaseForm($request->getWords()));
         $triggerWords = $trigger->getTokens();

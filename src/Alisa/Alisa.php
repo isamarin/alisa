@@ -161,53 +161,15 @@ class Alisa
             }
         }
 
-        if ($this->recognizeCommand()) {
-            $this->storage->storeTrigger($this->recognizedCommand);
-            return true;
-        }
-
-
-        /* Не удалось распознать */
-        if ( ! $this->recognizedCommand) {
-            $this->recognizedCommand = $this->mistakeTrigger;
-            $this->storage->storeTrigger($this->recognizedCommand);
-            return true;
-        }
-        return false;
-
+        $this->recognizeCommand();
+        $this->storage->storeTrigger($this->recognizedCommand);
+        return true;
     }
 
 
-    protected function recognizeCommand(): bool
+    protected function recognizeCommand()
     {
-        /**
-         * @var DistanceRecognition|MorphyRecognition $recognizer
-         */
-        $recognizer = null;
-        if ($this->recognizedType === RecognizedType::MORPHY_STRICT) {
-            $recognizer = new MorphyRecognition();
-        } else {
-            $recognizer = new DistanceRecognition();
-        }
-        $results = [];
-        /**
-         * @var Trigger $trigger
-         */
-        foreach ($this->triggers as $trigger) {
-            $results[$trigger->getName()] = $recognizer->rateSimilarities($this->request, $trigger);
-            if ($this->recognizedType === RecognizedType::MORPHY_STRICT && $results[$trigger->getName()] === 1) {
-                $this->recognizedCommand = $trigger;
-                return true;
-            }
-        }
-        if ($this->recognizedType === RecognizedType::DAMERAU_LEVENSHTEIN_DISTANCE) {
-            sort($results);
-            $this->recognizedCommand = $this->triggers->getByName(key($results));
-            return true;
-        }
-        $this->recognizedCommand = $this->mistakeTrigger;
-
-        return false;
+        $this->recognizedCommand = $this->alghoritm->rateSimilarities($this->request, $this->triggers);
     }
 
 

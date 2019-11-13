@@ -36,6 +36,7 @@ class SessionStorage
     {
         $this->file = $this->dir . DIRECTORY_SEPARATOR . $this->request->getSessionID() . '.json';
         if (file_exists($this->file)) {
+            $file = file_get_contents($this->file);;
             $this->data = json_decode(file_get_contents($this->file), true);
         } else {
             $this->data[self::SESSION][$this->request->getMessageID()][self::REQUEST] = serialize($this->request);
@@ -97,7 +98,7 @@ class SessionStorage
 
     public function save(): void
     {
-        file_put_contents($this->file, json_encode($this->data),777);
+        file_put_contents($this->file, json_encode($this->data));
     }
 
     public function _asArray(): array

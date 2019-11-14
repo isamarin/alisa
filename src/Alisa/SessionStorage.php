@@ -45,7 +45,7 @@ class SessionStorage
         }
     }
 
-    public function storeTrigger(string $triggerName,$data): void
+    public function storeTrigger(string $triggerName, $data): void
     {
         $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = $triggerName;
         $this->data[self::COMMON][$triggerName] = $data;
@@ -62,15 +62,6 @@ class SessionStorage
             return $this->data[self::COMMON][$key];
         }
         return null;
-    }
-
-    public function getPreviousRequest(): Request
-    {
-        if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::REQUEST],
-                [self::ALLOWED => ['Request']]);
-        }
-        return $this->request;
     }
 
     public function getPreviousTrigger(): string

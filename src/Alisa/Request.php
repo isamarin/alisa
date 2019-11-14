@@ -39,7 +39,10 @@ class Request implements Interfaces\RequestInterface
         self::$type = $data[self::REQUEST]['type'];
         self::$newSession = (bool)$data[self::SESSION]['new'];
         self::$arWords = $data[self::REQUEST]['nlu']['tokens'];
-        self::$utterance = $data[self::REQUEST]['original_utterance'];
+
+        if (isset($data[self::REQUEST]['original_utterance'])){
+            self::$utterance = $data[self::REQUEST]['original_utterance']?:'';
+        }
 
         if (isset($data[self::REQUEST]['markup']) && $markup = $data[self::REQUEST]['markup']['dangerous_context']) {
             self::$badLanguage = (bool)$markup;

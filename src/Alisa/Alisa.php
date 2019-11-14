@@ -217,16 +217,19 @@ class Alisa
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
+        /**
+         * Разобраться что это такое вообще?
+         */
 
-        if ( ! $this->request->isNewSession()) {
-            if ($this->directionType === DirectionType::FORWARD) {
-                $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
-            } else {
-                $this->storage->setItem($this->storage->getPreviousTrigger(),
-                    $this->request->getUtterance());
-            }
-            $this->storage->save();
-        }
+//        $utterance = $this->request->getUtterance();
+//        if ( ! $this->request->isNewSession()) {
+//            if ($this->directionType === DirectionType::FORWARD) {
+//                $this->storage->setItem($this->recognizedCommand->getName(), $utterance);
+//            } else {
+//                $this->storage->setItem($this->storage->getPreviousTrigger(), $utterance);
+//            }
+//            $this->storage->save();
+//        }
     }
 
     /**

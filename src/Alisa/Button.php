@@ -2,6 +2,8 @@
 
 namespace isamarin\Alisa;
 
+use Symfony\Component\Yaml\Tests\B;
+
 /**
  * Class Button
  * @package Alisa
@@ -17,7 +19,7 @@ class Button
     /** @var string $command */
     protected $link;
 
-    public function __construct(string $title = null, $hide = false)
+    public function __construct(string $title = 'untitled', $hide = true)
     {
         if ($title) {
             $this->title = $title;
@@ -28,43 +30,50 @@ class Button
     /**
      * Устанавливает URL к кнопке
      * @param string $link
+     * @return Button
      */
-    public function addLink(string $link): void
+    public function addLink(string $link)
     {
         if ($link && filter_var($link, FILTER_VALIDATE_URL)) {
             $this->link = $link;
         }
+        return $this;
     }
 
     /**
      * @param string $title
+     * @return Button
      */
-    public function setTitle(string $title): void
+    public function setTitle(string $title)
     {
         if ($title) {
             $this->title = $title;
         }
+        return $this;
     }
 
     /**
      * @param bool $hide
+     * @return Button
      */
-    public function setHide(bool $hide): void
+    public function setHide(bool $hide)
     {
         $this->hide = $hide;
+        return $this;
     }
 
     /**
      * Связывает триггер, который сработает при нажатии на кнопку
      * @param Trigger $trigger
-     * @param null $data
+     * @param string $data
      */
-    public function linkTrigger(Trigger $trigger, $data = null): void
+    public function linkTrigger(Trigger $trigger, $data = null): Button
     {
         if ($trigger->isValid()) {
             $this->trigger['NAME'] = $trigger->getName();
             $this->trigger['DATA'] = $data;
         }
+        return $this;
     }
 
     /**
@@ -73,9 +82,6 @@ class Button
     public function get(): array
     {
         $res = [];
-        if ( ! $this->title) {
-            $this->title = 'untitled';
-        }
         $res['title'] = $this->title;
         if ($this->trigger) {
             $res['payload'] = $this->trigger;

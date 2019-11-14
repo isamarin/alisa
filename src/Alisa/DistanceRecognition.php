@@ -11,6 +11,7 @@ class DistanceRecognition implements RecognitionInterface
     use Morphy;
 
     /**
+     * @deprecated Пока не использовать
      * Возвращает лучшее значение дистанции Дамерау-Левенштайна для выбранного триггера
      * @param Request $request
      * @param Trigger $trigger

@@ -10,8 +10,6 @@ class MorphyRecognition implements RecognitionInterface
     use Morphy;
 
     /**
-     * Возвращает 1 если найдено точное совпадение по группам ключевых слов
-     * выбранного триггера, или 0, если хотя бы одна из групп не совпала
      * @param Request $request
      * @param Trigger $trigger
      * @return int

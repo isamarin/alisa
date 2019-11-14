@@ -182,7 +182,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function getUtterance(): string
     {
-        return self::$utterance;
+        return self::$utterance?:' ';
     }
 
 }

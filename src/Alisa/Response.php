@@ -42,4 +42,5 @@ class Response
         }
         return $text;
     }
+
 }

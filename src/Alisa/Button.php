@@ -2,8 +2,6 @@
 
 namespace isamarin\Alisa;
 
-use Symfony\Component\Yaml\Tests\B;
-
 /**
  * Class Button
  * @package Alisa
@@ -27,6 +25,10 @@ class Button
         $this->hide = $hide;
     }
 
+    /**
+     * TODO
+     * FIX LINKS
+     */
     /**
      * Устанавливает URL к кнопке
      * @param string $link
@@ -93,4 +95,5 @@ class Button
 
         return $res;
     }
+
 }

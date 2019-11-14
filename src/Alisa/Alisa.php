@@ -23,6 +23,8 @@ class Alisa
     /** @var Trigger $mistakeTrigger */
     protected $mistakeTrigger;
 
+    protected $substuted = false;
+
     protected $request;
 
     protected $skillName;
@@ -113,29 +115,31 @@ class Alisa
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
             $this->recognizedCommand = $this->helloCommand;
-            $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
             return true;
         }
         /* Проверяем клик ли это на кнопку */
         if ($this->request->isButtonClick()) {
             $this->recognizedCommand = $this->triggers
                 ->getByName($this->request->getPayloadData()['NAME']);
+
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
             return true;
         }
 
         $previousTriggerName = $this->storage->getPreviousTrigger();
         if ($previousTriggerName) {
             $_previousCommand = $this->triggers->getByName($previousTriggerName);
-            if($_previousCommand->hasNextTrigger()){
+            if ($_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
                 $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
+                $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
                 return true;
             }
         }
 
         $this->recognizeCommand();
-        $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
+        $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
         return true;
     }
 
@@ -207,15 +211,15 @@ class Alisa
          * Разобраться что это такое вообще?
          */
 
-//        $utterance = $this->request->getUtterance();
-//        if ( ! $this->request->isNewSession()) {
-//            if ($this->directionType === DirectionType::FORWARD) {
-//                $this->storage->setItem($this->recognizedCommand->getName(), $utterance);
-//            } else {
-//                $this->storage->setItem($this->storage->getPreviousTrigger(), $utterance);
-//            }
-//            $this->storage->save();
-//        }
+        $utterance = $this->request->getUtterance();
+        if ( ! $this->request->isNewSession()) {
+            if ($this->directionType === DirectionType::FORWARD) {
+                $this->storage->setItem($this->recognizedCommand->getName(), $utterance);
+            } else {
+                $this->storage->setItem($this->storage->getPreviousTrigger(), $utterance);
+            }
+            $this->storage->save();
+        }
     }
 
     /**
@@ -241,6 +245,22 @@ class Alisa
             $this->storage->save();
         }
     }
+
+    /**
+     * TODO
+     * Возможно ли
+     * @param $triggerName
+     */
+    public function substituteTriggerTo($triggerName)
+    {
+        if ($this->recognizedCommand) {
+            $sub = $this->triggers->getByName($triggerName);
+            if ($sub){
+                $this->recognizedCommand = $this->triggers->getByName($triggerName);
+            }
+        }
+    }
+
 
     protected function sendHelp(): void
     {

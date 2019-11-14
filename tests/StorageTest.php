@@ -20,7 +20,7 @@ class StorageTest extends TestCase
 
        $trigger = new Trigger('TEST');
 
-       $storage->storeTrigger($trigger);
+       $storage->storeTrigger($trigger->getName());
 
     }
 }

@@ -127,7 +127,7 @@ class Alisa
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
             $this->recognizedCommand = $this->helloCommand;
-            $this->storage->storeTrigger($this->recognizedCommand);
+            $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
             return true;
         }
         /* Проверяем клик ли это на кнопку */
@@ -144,25 +144,28 @@ class Alisa
          * временный хотфикс
          * проблема связана с новым хранилищем сессий
          */
-        if ($prev = $this->storage->getPreviousTrigger()->getName()) {
-            $_previousCommand = $this->triggers->getByName($prev);
+
+        $previousTriggerName = $this->storage->getPreviousTrigger();
+
+        if ($previousTriggerName) {
+            $_previousCommand = $this->triggers->getByName($previousTriggerName);
             if ($_previousCommand->isStoreData() && $_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
                 $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                $this->storage->storeTrigger($this->recognizedCommand);
+                $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
                 return true;
             }
             /* мб далее дефолт? */
             if ($_previousCommand->hasNextTrigger()
                 && $_previousCommand->getNextTrigger() === $this->defaultCommand) {
                 $this->recognizedCommand = $this->defaultCommand;
-                $this->storage->storeTrigger($this->recognizedCommand);
+                $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
                 return true;
             }
         }
 
         $this->recognizeCommand();
-        $this->storage->storeTrigger($this->recognizedCommand);
+        $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
         return true;
     }
 
@@ -235,7 +238,7 @@ class Alisa
             if ($this->directionType === DirectionType::FORWARD) {
                 $this->storage->setItem($this->recognizedCommand->getName(), $this->request->getUtterance());
             } else {
-                $this->storage->setItem($this->storage->getPreviousTrigger()->getName(),
+                $this->storage->setItem($this->storage->getPreviousTrigger(),
                     $this->request->getUtterance());
             }
             $this->storage->save();

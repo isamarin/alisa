@@ -18,6 +18,7 @@ class SessionStorage
      * @var Response $response
      */
 
+    /** @var array $data */
     protected $data;
     protected $file;
 
@@ -44,9 +45,10 @@ class SessionStorage
         }
     }
 
-    public function storeTrigger(Trigger $trigger): void
+    public function storeTrigger(string $triggerName,$data): void
     {
-        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = serialize($trigger);
+        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = $triggerName;
+        $this->data[self::COMMON][$triggerName] = $data;
     }
 
     public function setItem($key, $item): void
@@ -71,10 +73,10 @@ class SessionStorage
         return $this->request;
     }
 
-    public function getPreviousTrigger(): Trigger
+    public function getPreviousTrigger(): string
     {
         if ($this->request->getMessageID() !== 0) {
-            return unserialize($this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER]);
+            return $this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER];
         }
         return null;
     }
@@ -82,7 +84,7 @@ class SessionStorage
     public function getTriggerByMessageID($messageID)
     {
         if (array_key_exists($messageID, $this->data[self::SESSION])) {
-            return unserialize($this->data[self::SESSION][$messageID][self::TRIGGER]);
+            return $this->data[self::SESSION][$messageID][self::TRIGGER];
         }
         return null;
     }

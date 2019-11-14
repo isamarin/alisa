@@ -18,19 +18,29 @@ class MorphyRecognition implements RecognitionInterface
      */
     public function rateSimilarities(Request $request, TriggerIterator $iterator): Trigger
     {
-
         foreach ($iterator as $trigger) {
+            /** @var Trigger $trigger */
+            if ($trigger->isInit() || $trigger->isDefault() || $trigger->isMistake()) {
+                continue;
+            }
             $requestWords = $this->convertToBaseForm($request->getWords());
             $triggerWords = $trigger->getTokens();
-            if (count($triggerWords)) {
+            $count = count($triggerWords);
+            $suggested = 0;
+            if ($count) {
                 foreach ($triggerWords as $level) {
                     $levelWords = $this->convertToBaseForm($level);
-                    if ( ! $this->compare($requestWords, $levelWords)) {
-                        break 2;
+                    if ($this->compare($requestWords, $levelWords)) {
+                        $suggested++;
                     }
                 }
+            } else {
+                continue;
+            }
+            if ($count===$suggested){
                 return $trigger;
             }
+
         }
         return $iterator->getMistakeTrigger();
     }

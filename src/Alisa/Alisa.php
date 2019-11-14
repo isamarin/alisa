@@ -27,8 +27,6 @@ class Alisa
 
     protected $skillName;
 
-    protected $recognizedType;
-
     protected $directionType;
 
     protected $alghoritm;
@@ -45,21 +43,9 @@ class Alisa
         $this->skillName = $skillName;
         $this->triggers = new TriggerIterator();
         $this->storage = new SessionStorage($this->request);
-        $this->recognizedType = RecognizedType::MORPHY_STRICT;
         $this->directionType = DirectionType::BACKWARD;
         $this->alghoritm = new MorphyRecognition();
 
-    }
-
-    /**
-     * @param int $RecognizedType
-     * @see RecognizedType
-     */
-    public function setRecognizedAlgorithm(int $RecognizedType): void
-    {
-        if (in_array($RecognizedType, RecognizedType::getConstants(), true)) {
-            $this->recognizedType = $RecognizedType;
-        }
     }
 
 

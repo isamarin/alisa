@@ -12,7 +12,7 @@ class ButtonTest extends TestCase
         $button->addLink('https://github.com/isamarin/alisa');
         $this->assertEquals([
             'title' => 'Look At This',
-            'hide' => false,
+            'hide' => true,
             'link' => 'https://github.com/isamarin/alisa',
         ], $button->get());
         $this->assertCount(3, $button->get());
@@ -20,15 +20,15 @@ class ButtonTest extends TestCase
         $button->setTitle('OMG');
         $this->assertEquals([
             'title' => 'OMG',
-            'hide' => false,
+            'hide' => true,
             'link' => 'https://github.com/isamarin/alisa',
         ], $button->get());
         $this->assertCount(3, $button->get());
 
-        $button->setHide(true);
+        $button->setHide(false);
         $this->assertEquals([
             'title' => 'OMG',
-            'hide' => true,
+            'hide' => false,
             'link' => 'https://github.com/isamarin/alisa',
         ], $button->get());
         $this->assertCount(3, $button->get());

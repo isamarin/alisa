@@ -137,28 +137,12 @@ class Alisa
             return true;
         }
 
-        /* Мб нам несут данные? */
-        /**
-         * TODO
-         * здесь что то пошло не так, и используется какая то странная логика.
-         * временный хотфикс
-         * проблема связана с новым хранилищем сессий
-         */
-
         $previousTriggerName = $this->storage->getPreviousTrigger();
-
         if ($previousTriggerName) {
             $_previousCommand = $this->triggers->getByName($previousTriggerName);
-            if ($_previousCommand->isStoreData() && $_previousCommand->hasNextTrigger()) {
+            if($_previousCommand->hasNextTrigger()){
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
                 $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
-                return true;
-            }
-            /* мб далее дефолт? */
-            if ($_previousCommand->hasNextTrigger()
-                && $_previousCommand->getNextTrigger() === $this->defaultCommand) {
-                $this->recognizedCommand = $this->defaultCommand;
                 $this->storage->storeTrigger($this->recognizedCommand->getName(),$this->request->getUtterance());
                 return true;
             }
@@ -204,18 +188,18 @@ class Alisa
             if ($tr->isValid()) {
                 if ($tr->isMistake()) {
                     $this->mistakeTrigger = $tr;
-                    //   continue;
+                    $this->triggers->append($tr);
+                    continue;
                 }
                 if ($tr->isDefault()) {
                     $this->defaultCommand = $tr;
-                    // continue;
+                    $this->triggers->append($tr);
+                    continue;
                 }
                 if ($tr->isInit()) {
                     $this->helloCommand = $tr;
-                    //   continue;
-                }
-                if ($this->defaultCommand && ! $tr->hasNextTrigger() && $this->defaultCommand->getName() !== $tr->getName()) {
-                    $tr->nextDelegate($this->defaultCommand);
+                    $this->triggers->append($tr);
+                    continue;
                 }
                 $this->triggers->append($tr);
             }

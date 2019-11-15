@@ -32,6 +32,10 @@ class Request implements Interfaces\RequestInterface
     private static $substitute = false;
 
 
+    /**
+     * Request constructor.
+     * @param null $data
+     */
     final public function __construct($data = null)
     {
         if ( ! $data) {
@@ -121,7 +125,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function isButtonClick(): bool
     {
-        return 'ButtonPressed' === self::$type;
+        return self::$type === 'ButtonPressed';
     }
 
     /**
@@ -130,7 +134,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function isVoiceRequest(): bool
     {
-        return 'SimpleUtterance' === self::$type;
+        return self::$type === 'SimpleUtterance';
     }
 
     /**
@@ -182,9 +186,9 @@ class Request implements Interfaces\RequestInterface
             'session' => [
                 'message_id' => self::$messageID,
                 'session_id' => self::$sessionID,
-                'user_id' => self::$userID,
+                'user_id' => self::$userID
             ],
-            'version' => self::VERSION,
+            'version' => self::VERSION
         ];
     }
 
@@ -218,16 +222,16 @@ class Request implements Interfaces\RequestInterface
      * Перенаправить запрос на самого себя с целью передачи делегации другому триггеру
      */
     /**
-     * @param string $from
-     * @param string $to
+     * @param $fromTriggerName
+     * @param $toTriggerName
      */
-    final public function makeSubstitued($fromTriggerName, $toTriggerName)
+    final public function makeSubstitued($fromTriggerName, $toTriggerName): void
     {
         $this->rawRequest['substituted']['from'] = $fromTriggerName;
         $this->rawRequest['substituted']['to'] = $toTriggerName;
         $gClient = new Client();
         $response = $gClient->post('https://' . $_SERVER['HTTP_HOST'], [
-            RequestOptions::JSON => $this->rawRequest,
+            RequestOptions::JSON => $this->rawRequest
         ]);
         die($response->getBody()->getContents());
     }

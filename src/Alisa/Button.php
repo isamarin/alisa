@@ -17,6 +17,11 @@ class Button
     /** @var string $command */
     protected $link;
 
+    /**
+     * Button constructor.
+     * @param string $title
+     * @param bool $hide
+     */
     public function __construct(string $title = 'untitled', $hide = true)
     {
         if ($title) {
@@ -34,7 +39,7 @@ class Button
      * @param string $link
      * @return Button
      */
-    public function addLink(string $link)
+    public function addLink(string $link): Button
     {
         if ($link && filter_var($link, FILTER_VALIDATE_URL)) {
             $this->link = $link;
@@ -46,7 +51,7 @@ class Button
      * @param string $title
      * @return Button
      */
-    public function setTitle(string $title)
+    public function setTitle(string $title): Button
     {
         if ($title) {
             $this->title = $title;
@@ -58,7 +63,7 @@ class Button
      * @param bool $hide
      * @return Button
      */
-    public function setHide(bool $hide)
+    public function setHide(bool $hide): Button
     {
         $this->hide = $hide;
         return $this;

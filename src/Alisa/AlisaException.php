@@ -4,24 +4,31 @@ namespace isamarin\Alisa;
 
 use Exception;
 
+/**
+ * Class AlisaException
+ * @package isamarin\Alisa
+ */
 class AlisaException extends Exception
 {
-    protected $message = 'Unknown exception';
-    protected $code = 0;
-    protected $file;
-    protected $line;
-
+    /**
+     * AlisaException constructor.
+     * @param string $message
+     * @param int $code
+     */
     public function __construct($message = '', $code = 0)
     {
         if ( ! $message) {
-            throw new $this('Unknown ' . get_class($this));
+            throw new $this('Unknown ' . \get_class($this));
         }
         parent::__construct($message, $code);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
-        return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
+        return \get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
             . $this->getTraceAsString();
     }
 }

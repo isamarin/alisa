@@ -28,12 +28,13 @@ Trait Morphy
             'storage' => PHPMORPHY_STORAGE_FILE,
             'with_gramtab' => false,
             'predict_by_suffix' => true,
-            'predict_by_db' => true,
+            'predict_by_db' => true
         ]);
         $out = [];
         foreach ($words as &$word) {
             $word = mb_strtoupper($word);
-            if ($res = $morphy->getBaseForm($word)[0]) {
+            $res = $morphy->getBaseForm($word)[0];
+            if ($res) {
                 $out[] = $res;
             } else {
                 $out[] = $word;

@@ -2,12 +2,21 @@
 
 namespace isamarin\Alisa;
 
+/**
+ * Class Response
+ * @package isamarin\Alisa
+ */
 class Response
 {
     private $answers;
     private $buttons = [];
 
-    public function addText(string $text, string $tts = null)
+    /**
+     * @param string $text
+     * @param string|null $tts
+     * @return $this
+     */
+    public function addText(string $text, string $tts = null): self
     {
         $answer = [];
         if ($text) {
@@ -22,7 +31,11 @@ class Response
         return $this;
     }
 
-    public function addButton(Button ... $buttons)
+    /**
+     * @param Button ...$buttons
+     * @return $this
+     */
+    public function addButton(Button ... $buttons): self
     {
         if ($buttons) {
             $res = [];
@@ -34,6 +47,9 @@ class Response
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function send(): array
     {
         $text = $this->answers[array_rand($this->answers, 1)];

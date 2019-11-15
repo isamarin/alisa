@@ -2,6 +2,10 @@
 
 namespace isamarin\Alisa;
 
+/**
+ * Class Trigger
+ * @package isamarin\Alisa
+ */
 class Trigger
 {
     private $name;
@@ -13,6 +17,10 @@ class Trigger
     protected $mistake = false;
     protected $start = false;
 
+    /**
+     * Trigger constructor.
+     * @param $name
+     */
     public function __construct($name)
     {
         $this->name = strtoupper($name);
@@ -35,6 +43,9 @@ class Trigger
         return $this;
     }
 
+    /**
+     * @return array
+     */
     public function getTokens(): array
     {
         return $this->words;
@@ -76,16 +87,25 @@ class Trigger
         return $this->storeData;
     }
 
+    /**
+     * @return Trigger
+     */
     public function getNextTrigger(): Trigger
     {
         return $this->next;
     }
 
+    /**
+     * @return bool
+     */
     public function hasNextTrigger(): bool
     {
         return $this->next ? true : false;
     }
 
+    /**
+     * @return string
+     */
     public function getName(): string
     {
         return $this->name;
@@ -126,16 +146,25 @@ class Trigger
         return $this;
     }
 
+    /**
+     * @return bool
+     */
     public function isDefault(): bool
     {
         return $this->default ? true : false;
     }
 
+    /**
+     * @return bool
+     */
     public function isMistake(): bool
     {
         return $this->mistake ? true : false;
     }
 
+    /**
+     * @return bool
+     */
     public function isInit(): bool
     {
         return $this->start;

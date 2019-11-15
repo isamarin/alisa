@@ -3,6 +3,8 @@
 namespace isamarin\Alisa;
 
 use isamarin\Alisa\Interfaces\RecognitionInterface;
+use ReflectionException;
+use function in_array;
 
 /**
  * Class Alisa
@@ -50,6 +52,9 @@ class Alisa
     }
 
 
+    /**
+     * @param RecognitionInterface $algorithm
+     */
     public function setAlgorithm(RecognitionInterface $algorithm): void
     {
         $this->alghoritm = $algorithm;
@@ -99,6 +104,9 @@ class Alisa
         }
     }
 
+    /**
+     * @return Request
+     */
     public function getRequest(): Request
     {
         return $this->request;
@@ -147,7 +155,7 @@ class Alisa
     }
 
 
-    protected function recognizeCommand()
+    protected function recognizeCommand(): void
     {
         $this->recognizedCommand = $this->alghoritm->rateSimilarities($this->request, $this->triggers);
     }
@@ -216,6 +224,7 @@ class Alisa
          * но как это сейчас работает черт его знает. Пусть лучше FORWARD и остается
          * TODO
          * убрать или проверить в чем преимущества
+         * @see Alisa::setTriggerDataDirection()
          */
 
         $utterance = $this->request->getUtterance();
@@ -232,6 +241,7 @@ class Alisa
     /**
      *
      * @param $direction
+     * @throws ReflectionException
      */
     public function setTriggerDataDirection($direction): void
     {
@@ -240,6 +250,10 @@ class Alisa
         }
     }
 
+    /**
+     * @param Trigger $trigger
+     * @param callable $func
+     */
     public function sendResponse(Trigger $trigger, callable $func): void
     {
 
@@ -253,7 +267,11 @@ class Alisa
         }
     }
 
-    public function substituteTriggerTo($triggerName, $saveCurrentSession = false)
+    /**
+     * @param $triggerName
+     * @param bool $saveCurrentSession
+     */
+    public function substituteTriggerTo($triggerName, $saveCurrentSession = false): void
     {
         if ($this->recognizedCommand) {
             $subsTo = $this->triggers->getByName($triggerName);
@@ -293,12 +311,20 @@ class Alisa
     }
 
 
+    /**
+     * @param $data
+     * @param $key
+     */
     public function storeCommonData($data, $key): void
     {
         $this->storage->setItem($key, $data);
 
     }
 
+    /**
+     * @param $key
+     * @return |null |null
+     */
     public function getCommonData($key)
     {
         return $this->storage->getItem($key);

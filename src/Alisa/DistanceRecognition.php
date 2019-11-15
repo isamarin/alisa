@@ -6,16 +6,20 @@ use isamarin\Alisa\Interfaces\RecognitionInterface;
 use isamarin\Alisa\Traits\Morphy;
 use Oefenweb\DamerauLevenshtein\DamerauLevenshtein;
 
+/**
+ * Class DistanceRecognition
+ * @package isamarin\Alisa
+ */
 class DistanceRecognition implements RecognitionInterface
 {
     use Morphy;
 
     /**
+     * @param Request $request
+     * @param TriggerIterator $trigger
+     * @return Trigger
      * @deprecated Пока не использовать
      * Возвращает лучшее значение дистанции Дамерау-Левенштайна для выбранного триггера
-     * @param Request $request
-     * @param Trigger $trigger
-     * @return int
      * @see https://ru.wikipedia.org/wiki/Расстояние_Дамерау_—_Левенштейна
      */
 

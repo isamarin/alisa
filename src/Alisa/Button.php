@@ -68,6 +68,7 @@ class Button
      * Связывает триггер, который сработает при нажатии на кнопку
      * @param Trigger $trigger
      * @param string $data
+     * @return Button
      */
     public function linkTrigger(Trigger $trigger, $data = null): Button
     {

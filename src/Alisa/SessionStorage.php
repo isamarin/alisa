@@ -75,7 +75,7 @@ class SessionStorage
 
     /**
      * @param $key
-     * @return |null |null
+     * @return |null |null |null
      */
     public function getItem($key)
     {
@@ -98,7 +98,7 @@ class SessionStorage
 
     /**
      * @param $messageID
-     * @return |null |null
+     * @return |null |null |null
      */
     public function getTriggerByMessageID($messageID)
     {

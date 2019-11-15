@@ -323,7 +323,7 @@ class Alisa
 
     /**
      * @param $key
-     * @return |null |null
+     * @return |null |null |null
      */
     public function getCommonData($key)
     {

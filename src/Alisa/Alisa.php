@@ -41,7 +41,7 @@ class Alisa
      */
     public function __construct(string $skillName, $data = null)
     {
-        $this->request = new Request();
+        $this->request = new Request($data);
         $this->skillName = $skillName;
         $this->triggers = new TriggerIterator();
         $this->storage = new SessionStorage($this->request);

@@ -2,6 +2,9 @@
 
 namespace isamarin\Alisa;
 
+use GuzzleHttp\Client;
+use GuzzleHttp\RequestOptions;
+
 /**
  * Запрос от Яндекс.Алиса
  *
@@ -15,43 +18,53 @@ class Request implements Interfaces\RequestInterface
     protected const SESSION = 'session';
     protected const REQUEST = 'request';
     protected const VERSION = '1.0';
-    private static $session_id;
-    private static $client_id;
-    private static $message_id;
+    private static $sessionID;
+    private static $clientID;
+    private static $messageID;
     private static $type;
-    private static $user_id;
+    private static $userID;
     private static $newSession;
     private static $payload;
     private static $arWords;
     private static $badLanguage;
     private static $utterance;
+    private $rawRequest;
+    private static $substitute = false;
+
 
     final public function __construct($data = null)
     {
         if ( ! $data) {
-            $data = json_decode(file_get_contents('php://input'), true);
+            $this->rawRequest = json_decode(file_get_contents('php://input'), true);
+            unset($data);
         }
 
-        self::$session_id = $data[self::SESSION]['session_id'];
-        self::$user_id = $data[self::SESSION]['user_id'];
-        self::$client_id = $data['meta']['client_id'];
-        self::$message_id = (int)$data[self::SESSION]['message_id'];
-        self::$type = $data[self::REQUEST]['type'];
-        self::$newSession = (bool)$data[self::SESSION]['new'];
-        self::$arWords = $data[self::REQUEST]['nlu']['tokens'];
 
-        if (isset($data[self::REQUEST]['original_utterance'])){
-            self::$utterance = $data[self::REQUEST]['original_utterance']?:'';
+        self::$sessionID = $this->rawRequest[self::SESSION]['session_id'];
+        self::$userID = $this->rawRequest[self::SESSION]['user_id'];
+        self::$clientID = $this->rawRequest['meta']['client_id'];
+        self::$messageID = (int)$this->rawRequest[self::SESSION]['message_id'];
+        self::$type = $this->rawRequest[self::REQUEST]['type'];
+        self::$newSession = (bool)$this->rawRequest[self::SESSION]['new'];
+        self::$arWords = $this->rawRequest[self::REQUEST]['nlu']['tokens'];
+
+        if (isset($this->rawRequest['substituted'])) {
+            writeLog('CATCH SUBS');
+            self::$substitute = $this->rawRequest['substituted'];
         }
 
-        if (isset($data[self::REQUEST]['markup']) && $markup = $data[self::REQUEST]['markup']['dangerous_context']) {
+        if (isset($this->rawRequest[self::REQUEST]['original_utterance'])) {
+            self::$utterance = $this->rawRequest[self::REQUEST]['original_utterance'] ?: '';
+        }
+
+        if (isset($this->rawRequest[self::REQUEST]['markup']) && $markup = $this->rawRequest[self::REQUEST]['markup']['dangerous_context']) {
             self::$badLanguage = (bool)$markup;
         } else {
             self::$badLanguage = false;
         }
 
-        if (isset($data[self::REQUEST]['payload'])) {
-            self::$payload = $data[self::REQUEST]['payload'];
+        if (isset($this->rawRequest[self::REQUEST]['payload'])) {
+            self::$payload = $this->rawRequest[self::REQUEST]['payload'];
         }
     }
 
@@ -63,7 +76,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function getClientID(): string
     {
-        return self::$client_id;
+        return self::$clientID;
     }
 
     /**
@@ -75,7 +88,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function getUserID(): string
     {
-        return self::$user_id;
+        return self::$userID;
     }
 
     /**
@@ -86,7 +99,7 @@ class Request implements Interfaces\RequestInterface
      */
     final public function getSessionID(): string
     {
-        return self::$session_id;
+        return self::$sessionID;
     }
 
     /**
@@ -99,7 +112,7 @@ class Request implements Interfaces\RequestInterface
 
     final public function getMessageID(): int
     {
-        return self::$message_id;
+        return self::$messageID;
     }
 
     /**
@@ -167,12 +180,20 @@ class Request implements Interfaces\RequestInterface
     {
         return [
             'session' => [
-                'message_id' => self::$message_id,
-                'session_id' => self::$session_id,
-                'user_id' => self::$user_id,
+                'message_id' => self::$messageID,
+                'session_id' => self::$sessionID,
+                'user_id' => self::$userID,
             ],
             'version' => self::VERSION,
         ];
+    }
+
+    /**
+     * @return array
+     */
+    final public function getRAW(): array
+    {
+        return $this->rawRequest;
     }
 
     /**
@@ -182,7 +203,33 @@ class Request implements Interfaces\RequestInterface
      */
     final public function getUtterance(): string
     {
-        return self::$utterance?:' ';
+        return self::$utterance ?: ' ';
+    }
+
+    /**
+     * Это перенаправленный триггером запрос?
+     */
+    final public function isSubstitued()
+    {
+        return self::$substitute;
+    }
+
+    /**
+     * Перенаправить запрос на самого себя с целью передачи делегации другому триггеру
+     */
+    /**
+     * @param string $from
+     * @param string $to
+     */
+    final public function makeSubstitued($fromTriggerName, $toTriggerName)
+    {
+        $this->rawRequest['substituted']['from'] = $fromTriggerName;
+        $this->rawRequest['substituted']['to'] = $toTriggerName;
+        $gClient = new Client();
+        $response = $gClient->post('https://' . $_SERVER['HTTP_HOST'], [
+            RequestOptions::JSON => $this->rawRequest,
+        ]);
+        die($response->getBody()->getContents());
     }
 
 }

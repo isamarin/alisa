@@ -41,13 +41,12 @@ class Alisa
      */
     public function __construct(string $skillName, $data = null)
     {
-        $this->request = new Request($data);
+        $this->request = new Request();
         $this->skillName = $skillName;
         $this->triggers = new TriggerIterator();
         $this->storage = new SessionStorage($this->request);
         $this->directionType = DirectionType::BACKWARD;
         $this->alghoritm = new MorphyRecognition();
-
     }
 
 
@@ -112,6 +111,10 @@ class Alisa
      */
     protected function getCommand(): bool
     {
+        if ($this->request->isSubstitued()) {
+            $this->recognizedCommand = $this->triggers->getByName($this->request->isSubstitued()['to']);
+            return true;
+        }
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
             $this->recognizedCommand = $this->helloCommand;
@@ -248,17 +251,23 @@ class Alisa
 
     /**
      * TODO
-     * Возможно ли
+     * сохранять ли действия
      * @param $triggerName
      */
-    public function substituteTriggerTo($triggerName)
+    public function substituteTriggerTo($triggerName, $saveCurrentSession = false)
     {
         if ($this->recognizedCommand) {
-            $sub = $this->triggers->getByName($triggerName);
-            if ($sub){
-                $this->recognizedCommand = $this->triggers->getByName($triggerName);
+            $subsTo = $this->triggers->getByName($triggerName);
+            if ($subsTo) {
+                $this->getRequest()->makeSubstitued($this->recognizedCommand->getName(), $subsTo->getName());
             }
         }
+        $answer = new Response();
+        $answer->addText('Внутренняя ошибка');
+        $response = $this->request->getServiceData();
+        $response['response'] = $answer->send();
+        print json_encode($response);
+        die();
     }
 
 

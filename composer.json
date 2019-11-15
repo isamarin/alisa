@@ -33,7 +33,7 @@
     "ext-curl": "*",
     "ext-openssl": "*",
     "phpunit/phpunit": "^7.5",
-    "tmarois/filebase": "1.0.*"
+    "guzzlehttp/guzzle": "6.4.*"
   },
   "autoload": {
     "psr-4": {

@@ -3,6 +3,7 @@
 namespace isamarin\Alisa;
 
 use Exception;
+use function get_class;
 
 /**
  * Class AlisaException
@@ -18,7 +19,7 @@ class AlisaException extends Exception
     public function __construct($message = '', $code = 0)
     {
         if ( ! $message) {
-            throw new $this('Unknown ' . \get_class($this));
+            throw new $this('Unknown ' . get_class($this));
         }
         parent::__construct($message, $code);
     }
@@ -28,7 +29,7 @@ class AlisaException extends Exception
      */
     public function __toString()
     {
-        return \get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
+        return get_class($this) . " '{$this->message}' in {$this->file}({$this->line})\n"
             . $this->getTraceAsString();
     }
 }

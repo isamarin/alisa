@@ -2,6 +2,8 @@
 
 namespace isamarin\Alisa;
 
+use function array_key_exists;
+
 /**
  * Class SessionStorage
  * @package isamarin\Alisa
@@ -77,7 +79,7 @@ class SessionStorage
      */
     public function getItem($key)
     {
-        if (\array_key_exists($key, $this->data[self::COMMON])) {
+        if (array_key_exists($key, $this->data[self::COMMON])) {
             return $this->data[self::COMMON][$key];
         }
         return null;
@@ -100,7 +102,7 @@ class SessionStorage
      */
     public function getTriggerByMessageID($messageID)
     {
-        if (\array_key_exists($messageID, $this->data[self::SESSION])) {
+        if (array_key_exists($messageID, $this->data[self::SESSION])) {
             return $this->data[self::SESSION][$messageID][self::TRIGGER];
         }
         return null;

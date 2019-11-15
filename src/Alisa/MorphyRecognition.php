@@ -4,6 +4,8 @@ namespace isamarin\Alisa;
 
 use isamarin\Alisa\Interfaces\RecognitionInterface;
 use isamarin\Alisa\Traits\Morphy;
+use function count;
+use function in_array;
 
 /**
  * Class MorphyRecognition
@@ -27,7 +29,7 @@ class MorphyRecognition implements RecognitionInterface
             }
             $requestWords = $this->convertToBaseForm($request->getWords());
             $triggerWords = $trigger->getTokens();
-            $count = \count($triggerWords);
+            $count = count($triggerWords);
             $suggested = 0;
             if ($count) {
                 foreach ($triggerWords as $level) {
@@ -55,7 +57,7 @@ class MorphyRecognition implements RecognitionInterface
     protected function compare($one, $two): bool
     {
         foreach ($one as $w) {
-            if (\in_array($w, $two, true)) {
+            if (in_array($w, $two, true)) {
                 return true;
             }
         }

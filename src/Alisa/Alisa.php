@@ -244,16 +244,11 @@ class Alisa
             $answer = $func();
             $response = $this->request->getServiceData();
             $response['response'] = $answer->send();
-            print json_encode($response);
             $this->storage->save();
+            die(json_encode($response));
         }
     }
 
-    /**
-     * TODO
-     * сохранять ли действия
-     * @param $triggerName
-     */
     public function substituteTriggerTo($triggerName, $saveCurrentSession = false)
     {
         if ($this->recognizedCommand) {
@@ -266,8 +261,10 @@ class Alisa
         $answer->addText('Внутренняя ошибка');
         $response = $this->request->getServiceData();
         $response['response'] = $answer->send();
-        print json_encode($response);
-        die();
+        if ($saveCurrentSession) {
+            $this->storage->save();
+        }
+        die(json_encode($response));
     }
 
 
@@ -288,8 +285,7 @@ class Alisa
         $answer->addButton($button, $button2);
         $response = $this->request->getServiceData();
         $response['response'] = $answer->send();
-        print json_encode($response);
-        die();
+        die(json_encode($response));
     }
 
 

@@ -3,6 +3,7 @@
 namespace isamarin\Alisa;
 
 use isamarin\Alisa\Interfaces\RecognitionInterface;
+use PharIo\Manifest\Application;
 use ReflectionException;
 use function in_array;
 
@@ -210,12 +211,13 @@ class Alisa
         if ($this->request->isNewSession()) {
             $this->storage->storeTrigger($this->recognizedCommand->getName(), '');
         } else {
-            $replaced = null;
-            if ($this->directionType === DirectionType::BACKWARD) {
-                $replaced = $this->storage->getPreviousTrigger();
+            if ($this->recognizedCommand){
+                $replaced = null;
+                if ($this->directionType === DirectionType::BACKWARD) {
+                    $replaced = $this->storage->getPreviousTrigger();
+                }
+                $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
             }
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
-
         }
         $this->storage->save();
     }

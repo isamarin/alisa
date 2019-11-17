@@ -14,6 +14,7 @@ class SessionStorage
     protected const SESSION = 'sessions';
     protected const REQUEST = 'request';
     protected const COMMON = 'common';
+    protected const DATA = 'data';
     protected const ALLOWED = 'allowed_class';
     protected $dir;
     /**
@@ -41,6 +42,7 @@ class SessionStorage
         } else {
             trigger_error('Ошибка при создании диррекории ' . $this->dir);
         }
+        writeLog($this->data);
     }
 
     protected function getData(): void
@@ -48,9 +50,6 @@ class SessionStorage
         $this->file = $this->dir . DIRECTORY_SEPARATOR . $this->request->getSessionID() . '.json';
         if (file_exists($this->file)) {
             $this->data = json_decode(file_get_contents($this->file), true);
-        } else {
-            $this->data[self::SESSION][$this->request->getMessageID()][self::REQUEST] = serialize($this->request);
-            $this->save();
         }
     }
 
@@ -58,10 +57,27 @@ class SessionStorage
      * @param string $triggerName
      * @param $data
      */
-    public function storeTrigger(string $triggerName, $data): void
+    public function storeTrigger(string $triggerName, $data,$replaceTrigger = null): void
     {
         $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = $triggerName;
-        $this->data[self::COMMON][$triggerName] = $data;
+        $this->data[self::SESSION][$this->request->getMessageID()][self::DATA] = $data;
+
+        $this->data[self::TRIGGER][$triggerName] = $data;
+        if ($replaceTrigger){
+            $this->data[$replaceTrigger] = $data;
+        }
+    }
+
+    /**
+     * @param $trigger
+     * @return |null
+     */
+    public function getTriggerData($trigger){
+
+        if (array_key_exists(self::TRIGGER,$this->data) && array_key_exists($trigger, $this->data[self::TRIGGER])) {
+            return $this->data[self::TRIGGER][$trigger];
+        }
+        return null;
     }
 
     /**

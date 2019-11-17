@@ -126,7 +126,6 @@ class Alisa
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
             $this->recognizedCommand = $this->helloCommand;
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
             return true;
         }
         /* Проверяем клик ли это на кнопку */
@@ -134,7 +133,6 @@ class Alisa
             $this->recognizedCommand = $this->triggers
                 ->getByName($this->request->getPayloadData()['NAME']);
 
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
             return true;
         }
 
@@ -143,14 +141,12 @@ class Alisa
             $_previousCommand = $this->triggers->getByName($previousTriggerName);
             if ($_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
-                $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
+                //  $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
                 return true;
             }
         }
 
         $this->recognizeCommand();
-        $this->storage->storeTrigger($this->recognizedCommand->getName(), $this->request->getUtterance());
         return true;
     }
 
@@ -160,15 +156,6 @@ class Alisa
         $this->recognizedCommand = $this->alghoritm->rateSimilarities($this->request, $this->triggers);
     }
 
-
-    /**
-     * @param string $triggerName
-     * @return mixed
-     */
-    public function getTriggerData(string $triggerName)
-    {
-        return $this->storage->getItem($triggerName);
-    }
 
     /**
      * @return Trigger
@@ -218,24 +205,19 @@ class Alisa
         if ( ! $this->recognizedCommand) {
             $this->getCommand();
         }
-        /**
-         * Это что то связано с очередностью триггеров, была какая то проблема,
-         * связанная с делегированием, триггер должен знать КОМУ передовать или от КОГО принимать
-         * но как это сейчас работает черт его знает. Пусть лучше FORWARD и остается
-         * TODO
-         * убрать или проверить в чем преимущества
-         * @see Alisa::setTriggerDataDirection()
-         */
 
         $utterance = $this->request->getUtterance();
-        if ( ! $this->request->isNewSession()) {
-            if ($this->directionType === DirectionType::FORWARD) {
-                $this->storage->setItem($this->recognizedCommand->getName(), $utterance);
-            } else {
-                $this->storage->setItem($this->storage->getPreviousTrigger(), $utterance);
+        if ($this->request->isNewSession()) {
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), '');
+        } else {
+            $replaced = null;
+            if ($this->directionType === DirectionType::BACKWARD) {
+                $replaced = $this->storage->getPreviousTrigger();
             }
-            $this->storage->save();
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
+
         }
+        $this->storage->save();
     }
 
     /**
@@ -283,6 +265,7 @@ class Alisa
         $answer->addText('Внутренняя ошибка');
         $response = $this->request->getServiceData();
         $response['response'] = $answer->send();
+        trigger_error('Невернная передача триггер - триггер');
         if ($saveCurrentSession) {
             $this->storage->save();
         }
@@ -319,6 +302,15 @@ class Alisa
     {
         $this->storage->setItem($key, $data);
 
+    }
+
+    /**
+     * @param string $triggerName
+     * @return mixed
+     */
+    public function getTriggerData(string $triggerName)
+    {
+        return $this->storage->getTriggerData($triggerName);
     }
 
     /**

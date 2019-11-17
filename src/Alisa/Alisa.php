@@ -3,8 +3,8 @@
 namespace isamarin\Alisa;
 
 use isamarin\Alisa\Interfaces\RecognitionInterface;
-use PharIo\Manifest\Application;
 use ReflectionException;
+use function array_key_exists;
 use function in_array;
 
 /**
@@ -131,8 +131,16 @@ class Alisa
         }
         /* Проверяем клик ли это на кнопку */
         if ($this->request->isButtonClick()) {
-            $this->recognizedCommand = $this->triggers
-                ->getByName($this->request->getPayloadData()['NAME']);
+            $button = $this->request->getPayloadData();
+            if (array_key_exists('NAME', $button)) {
+                $this->recognizedCommand = $this->triggers
+                    ->getByName($this->request->getPayloadData()['NAME']);
+            } else {
+                $this->recognizedCommand = $this->triggers->getDefaultTrigger();
+            }
+            if (array_key_exists('ASSIGN', $button)) {
+                $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
+            }
 
             return true;
         }
@@ -210,14 +218,12 @@ class Alisa
         $utterance = $this->request->getUtterance();
         if ($this->request->isNewSession()) {
             $this->storage->storeTrigger($this->recognizedCommand->getName(), '');
-        } else {
-            if ($this->recognizedCommand){
-                $replaced = null;
-                if ($this->directionType === DirectionType::BACKWARD) {
-                    $replaced = $this->storage->getPreviousTrigger();
-                }
-                $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
+        } elseif ($this->recognizedCommand) {
+            $replaced = null;
+            if ($this->directionType === DirectionType::BACKWARD && ! $this->recognizedCommand->isDefault()) {
+                $replaced = $this->storage->getPreviousTrigger();
             }
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
         }
         $this->storage->save();
     }

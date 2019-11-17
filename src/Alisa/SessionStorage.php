@@ -42,7 +42,7 @@ class SessionStorage
         } else {
             trigger_error('Ошибка при создании диррекории ' . $this->dir);
         }
-        writeLog($this->data);
+
     }
 
     protected function getData(): void
@@ -57,14 +57,14 @@ class SessionStorage
      * @param string $triggerName
      * @param $data
      */
-    public function storeTrigger(string $triggerName, $data,$replaceTrigger = null): void
+    public function storeTrigger(string $triggerName, $data, $replaceTrigger = null): void
     {
         $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = $triggerName;
         $this->data[self::SESSION][$this->request->getMessageID()][self::DATA] = $data;
 
         $this->data[self::TRIGGER][$triggerName] = $data;
-        if ($replaceTrigger){
-            $this->data[$replaceTrigger] = $data;
+        if ($replaceTrigger) {
+            $this->data[self::TRIGGER][$replaceTrigger] = $data;
         }
     }
 
@@ -72,12 +72,19 @@ class SessionStorage
      * @param $trigger
      * @return |null
      */
-    public function getTriggerData($trigger){
+    public function getTriggerData($trigger)
+    {
 
-        if (array_key_exists(self::TRIGGER,$this->data) && array_key_exists($trigger, $this->data[self::TRIGGER])) {
+        if (array_key_exists(self::TRIGGER, $this->data) && array_key_exists($trigger, $this->data[self::TRIGGER])) {
             return $this->data[self::TRIGGER][$trigger];
         }
         return null;
+    }
+
+    public function setTriggerData($trigger, $data)
+    {
+        $this->data[self::TRIGGER][$trigger] = $data;
+        $this->save();
     }
 
     /**

@@ -16,6 +16,7 @@ class Button
     protected $hide;
     /** @var string $command */
     protected $link;
+    protected $assign;
 
     /**
      * Button constructor.
@@ -75,12 +76,16 @@ class Button
      * @param string $data
      * @return Button
      */
-    public function linkTrigger(Trigger $trigger, $data = null): Button
+    public function linkTrigger(Trigger $trigger): Button
     {
         if ($trigger->isValid()) {
             $this->trigger['NAME'] = $trigger->getName();
-            $this->trigger['DATA'] = $data;
         }
+        return $this;
+    }
+
+    public function assignDataTo(Trigger $trigger){
+        $this->assign = $trigger->getName();
         return $this;
     }
 
@@ -94,8 +99,12 @@ class Button
         if ($this->trigger) {
             $res['payload'] = $this->trigger;
         }
+        $res['payload']['TITLE'] = $this->title;
         if ($this->link) {
             $res['link'] = $this->link;
+        }
+        if ($this->assign){
+            $res['payload']['ASSIGN'] = $this->assign;
         }
         $res['hide'] = $this->hide;
 

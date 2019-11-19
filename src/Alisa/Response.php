@@ -10,6 +10,7 @@ class Response
 {
     private $answers;
     private $buttons = [];
+    private $paginatorLength;
 
     /**
      * @param string $text
@@ -44,16 +45,29 @@ class Response
         return $this;
     }
 
+    /**
+     * @param int $length
+     */
+    public function setButtonsPaginator(int $length)
+    {
+        $this->paginatorLength = $length;
+    }
 
-    public function serviceActions($payload,$recognized){
 
-        $pag = new Paginator($payload, $recognized);
-        foreach ($this->buttons as $button){
-            $pag->append($button);
+    /**
+     * Не использовать!
+     * @internal
+     */
+    public function serviceActions($payload, $recognized):void
+    {
+        if ($this->paginatorLength) {
+            $pag = new Paginator($payload, $recognized);
+            $pag->setLimit($this->paginatorLength);
+            foreach ($this->buttons as $button) {
+                $pag->append($button);
+            }
+            $this->buttons = $pag->getPaginated();
         }
-
-
-        $this->buttons = $pag->getPaginated();
     }
 
     /**
@@ -64,7 +78,7 @@ class Response
 
         $rawButtons = [];
         foreach ($this->buttons as $button) {
-          $rawButtons[] = $button->get();
+            $rawButtons[] = $button->get();
         }
 
         $text = $this->answers[array_rand($this->answers, 1)];

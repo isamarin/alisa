@@ -16,11 +16,11 @@ class Paginator
     protected $buttons;
     protected $payload;
 
-    protected $limit = 5;
-
+    protected $limit;
     protected $topage;
     protected $current;
     protected $prevTrigger;
+
 
     public function __construct($requestPayload, $prevTrigger)
     {
@@ -29,6 +29,11 @@ class Paginator
         if (array_key_exists('services', $this->payload)) {
             $this->topage = $this->payload['services']['topage'];
         }
+    }
+
+    public function setLimit(int $limit)
+    {
+        $this->limit = $limit;
     }
 
     public function append(Button $button)
@@ -40,6 +45,7 @@ class Paginator
         }
     }
 
+    /** @internal */
     public function getPaginated()
     {
         $this->addServiceButtons();

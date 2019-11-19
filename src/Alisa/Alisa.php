@@ -251,7 +251,7 @@ class Alisa
             /** @var Response $answer */
             $answer = $func();
             $response = $this->request->getServiceData();
-            if (!$this->request->isNewSession()){
+            if ( ! $this->request->isNewSession()) {
                 $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand);
             }
             $response['response'] = $answer->send();
@@ -332,4 +332,5 @@ class Alisa
     {
         return $this->storage->getItem($key);
     }
+
 }

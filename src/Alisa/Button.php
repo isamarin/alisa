@@ -89,6 +89,10 @@ class Button
         return $this;
     }
 
+    public function addPayload($payload){
+        $this->trigger['services'] = $payload;
+    }
+
     /**
      * @return array
      */

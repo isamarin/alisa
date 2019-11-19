@@ -16,6 +16,7 @@ class Response
      * @param string|null $tts
      * @return $this
      */
+
     public function addText(string $text, string $tts = null): self
     {
         $answer = [];
@@ -38,13 +39,21 @@ class Response
     public function addButton(Button ... $buttons): self
     {
         if ($buttons) {
-            $res = [];
-            foreach ($buttons as $button) {
-                $res[] = $button->get();
-            }
-            $this->buttons = array_merge($this->buttons, $res);
+            $this->buttons = array_merge($this->buttons, $buttons);
         }
         return $this;
+    }
+
+
+    public function serviceActions($payload,$recognized){
+
+        $pag = new Paginator($payload, $recognized);
+        foreach ($this->buttons as $button){
+            $pag->append($button);
+        }
+
+
+        $this->buttons = $pag->getPaginated();
     }
 
     /**
@@ -52,9 +61,15 @@ class Response
      */
     public function send(): array
     {
+
+        $rawButtons = [];
+        foreach ($this->buttons as $button) {
+          $rawButtons[] = $button->get();
+        }
+
         $text = $this->answers[array_rand($this->answers, 1)];
         if ($this->buttons) {
-            $text['buttons'] = $this->buttons;
+            $text['buttons'] = $rawButtons;
         }
         return $text;
     }

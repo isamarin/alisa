@@ -53,7 +53,6 @@ class Response
         $this->paginatorLength = $length;
     }
 
-
     /**
      * Не использовать!
      * @internal

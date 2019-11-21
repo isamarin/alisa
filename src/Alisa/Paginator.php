@@ -38,7 +38,7 @@ class Paginator
 
     public function append(Button $button)
     {
-        if (array_key_exists('link', $button->get())) {
+        if ($button->get()['hide'] === false) {
             $this->links[] = $button;
         } else {
             $this->buttons[] = $button;

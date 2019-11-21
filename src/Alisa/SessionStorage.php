@@ -74,8 +74,7 @@ class SessionStorage
      */
     public function getTriggerData($trigger)
     {
-
-        if (array_key_exists(self::TRIGGER, $this->data) && array_key_exists($trigger, $this->data[self::TRIGGER])) {
+        if (isset($this->data[self::TRIGGER][$trigger])) {
             return $this->data[self::TRIGGER][$trigger];
         }
         return null;

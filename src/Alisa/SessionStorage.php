@@ -98,11 +98,11 @@ class SessionStorage
 
     /**
      * @param $key
-     * @return |null |null |null
+     * @return null
      */
     public function getItem($key)
     {
-        if (array_key_exists($key, $this->data[self::COMMON])) {
+        if (isset($this->data[self::COMMON]) && array_key_exists($key, $this->data[self::COMMON])) {
             return $this->data[self::COMMON][$key];
         }
         return null;

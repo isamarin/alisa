@@ -12,8 +12,8 @@ use function count;
  */
 class Paginator
 {
-    protected $links;
-    protected $buttons;
+    protected $links = [];
+    protected $buttons = [];
     protected $payload;
 
     protected $limit;

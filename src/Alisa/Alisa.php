@@ -218,11 +218,17 @@ class Alisa
 
         $utterance = $this->request->getUtterance();
         if ($this->request->isNewSession()) {
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), '');
+            $this->storage->storeTrigger($this->recognizedCommand->getName(), 'new session');
         } elseif ($this->recognizedCommand) {
             $replaced = null;
-            if ($this->directionType === DirectionType::BACKWARD && ! $this->recognizedCommand->isDefault()) {
+            if ($this->directionType === DirectionType::BACKWARD) {
                 $replaced = $this->storage->getPreviousTrigger();
+                if ($this->triggers->getByName($replaced)->isDefault()) {
+                    $replaced = null;
+                }
+            }
+            if ($this->request->isButtonClick()) {
+                $utterance = $this->request->getPayloadData()['TITLE'];
             }
             $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
         }

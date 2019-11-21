@@ -49,7 +49,10 @@ class Paginator
     public function getPaginated()
     {
         $this->addServiceButtons();
-        return array_merge($this->links, $this->buttons);
+        if ( ! empty($this->buttons)) {
+            return array_merge($this->buttons, $this->links);
+        }
+        return $this->links;
     }
 
     protected function addServiceButtons()

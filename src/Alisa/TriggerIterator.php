@@ -101,9 +101,7 @@ class TriggerIterator implements Iterator
             }
         }
         return false;
-
     }
-
     /**
      * @return bool|Trigger
      */

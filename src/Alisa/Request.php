@@ -53,7 +53,6 @@ class Request implements Interfaces\RequestInterface
         self::$arWords = $this->rawRequest[self::REQUEST]['nlu']['tokens'];
 
         if (isset($this->rawRequest['substituted'])) {
-            writeLog('CATCH SUBS');
             self::$substitute = $this->rawRequest['substituted'];
         }
 

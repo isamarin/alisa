@@ -150,7 +150,9 @@ class Alisa
             $_previousCommand = $this->triggers->getByName($previousTriggerName);
             if ($_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
-                //  $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
+                if ($this->request->isButtonClick() && !$this->request->isSubstitued()){
+                    $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
+                }
                 return true;
             }
         }

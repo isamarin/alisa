@@ -137,6 +137,7 @@ class Alisa
                     ->getByName($this->request->getPayloadData()['NAME']);
             } else {
                 $this->recognizedCommand = $this->triggers->getDefaultTrigger();
+                $this->storage->setTriggerData($this->storage->getPreviousTrigger(), $this->request->getUtterance());
             }
             if (array_key_exists('ASSIGN', $button)) {
                 $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
@@ -150,9 +151,7 @@ class Alisa
             $_previousCommand = $this->triggers->getByName($previousTriggerName);
             if ($_previousCommand->hasNextTrigger()) {
                 $this->recognizedCommand = $_previousCommand->getNextTrigger();
-                if ($this->request->isButtonClick() && !$this->request->isSubstitued()){
-                    $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                }
+                //  $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
                 return true;
             }
         }

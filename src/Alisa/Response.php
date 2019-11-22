@@ -11,12 +11,22 @@ class Response
     private $answers;
     private $buttons = [];
     private $paginatorLength;
+    private $recognized;
+
+    /**
+     * Response constructor.
+     * @param $recognized
+     */
+    public function __construct()
+    {
+    }
 
     /**
      * @param string $text
      * @param string|null $tts
      * @return $this
      */
+
 
     public function addText(string $text, string $tts = null): self
     {
@@ -48,7 +58,7 @@ class Response
     /**
      * @param int $length
      */
-    public function setButtonsPaginator(int $length)
+    public function setButtonsPaginator(int $length): void
     {
         $this->paginatorLength = $length;
     }
@@ -57,7 +67,7 @@ class Response
      * Не использовать!
      * @internal
      */
-    public function serviceActions($payload, $recognized):void
+    public function serviceActions($payload, $recognized): void
     {
         if ($this->paginatorLength) {
             $pag = new Paginator($payload, $recognized);
@@ -72,12 +82,16 @@ class Response
     /**
      * @return array
      */
-    public function send(): array
+    public function send(Trigger $recognized): array
     {
-
         $rawButtons = [];
         foreach ($this->buttons as $button) {
-            $rawButtons[] = $button->get();
+            /** @var Button $button */
+            $raw = $button->get();
+            if (isset($raw['payload']['ATTACH']) && $raw['payload']['ATTACH'] === true) {
+                $raw['payload']['ATTACH'] = $recognized->getName();
+            }
+            $rawButtons[] = $raw;
         }
 
         $text = $this->answers[array_rand($this->answers, 1)];

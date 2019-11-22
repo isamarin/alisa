@@ -41,7 +41,7 @@ class MorphyRecognition implements RecognitionInterface
             } else {
                 continue;
             }
-            if ($count===$suggested){
+            if ($count === $suggested) {
                 return $trigger;
             }
 

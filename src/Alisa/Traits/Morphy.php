@@ -26,7 +26,7 @@ Trait Morphy
             'storage' => PHPMORPHY_STORAGE_FILE,
             'with_gramtab' => false,
             'predict_by_suffix' => true,
-            'predict_by_db' => true
+            'predict_by_db' => true,
         ]);
         $out = [];
         foreach ($words as &$word) {

@@ -28,9 +28,8 @@ class Request implements Interfaces\RequestInterface
     private static $arWords;
     private static $badLanguage;
     private static $utterance;
-    private $rawRequest;
     private static $substitute = false;
-
+    private $rawRequest;
 
     /**
      * Request constructor.
@@ -148,7 +147,7 @@ class Request implements Interfaces\RequestInterface
     /**
      * Возвращает информацию, которая была передана с нажатой кнопки
      * @return mixed
-     * @see Button::linkTrigger()
+     * @see Button::delegateTo()
      */
     final public function getPayloadData()
     {
@@ -185,9 +184,9 @@ class Request implements Interfaces\RequestInterface
             'session' => [
                 'message_id' => self::$messageID,
                 'session_id' => self::$sessionID,
-                'user_id' => self::$userID
+                'user_id' => self::$userID,
             ],
-            'version' => self::VERSION
+            'version' => self::VERSION,
         ];
     }
 
@@ -230,7 +229,7 @@ class Request implements Interfaces\RequestInterface
         $this->rawRequest['substituted']['to'] = $toTriggerName;
         $gClient = new Client();
         $response = $gClient->post('https://' . $_SERVER['HTTP_HOST'], [
-            RequestOptions::JSON => $this->rawRequest
+            RequestOptions::JSON => $this->rawRequest,
         ]);
         die($response->getBody()->getContents());
     }

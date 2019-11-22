@@ -13,17 +13,17 @@ class TriggerIterator implements Iterator
     protected $position;
     protected $array;
 
+    public function __construct()
+    {
+        $this->position = 0;
+    }
+
     /**
      * @param Trigger $command
      */
     public function append(Trigger $command): void
     {
         $this->array[] = $command;
-    }
-
-    public function __construct()
-    {
-        $this->position = 0;
     }
 
     public function rewind(): void
@@ -102,6 +102,7 @@ class TriggerIterator implements Iterator
         }
         return false;
     }
+
     /**
      * @return bool|Trigger
      */

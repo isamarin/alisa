@@ -45,6 +45,18 @@ class SessionStorage
 
     }
 
+    /**
+     * @return bool
+     */
+    protected function checkDirectory(): bool
+    {
+        if ( ! file_exists($this->dir)) {
+            return ! ( ! mkdir($this->dir)
+                && ! is_dir($this->dir));
+        }
+        return true;
+    }
+
     protected function getData(): void
     {
         $this->file = $this->dir . DIRECTORY_SEPARATOR . $this->request->getSessionID() . '.json';
@@ -74,16 +86,18 @@ class SessionStorage
      */
     public function getTriggerData($trigger)
     {
-        if (isset($this->data[self::TRIGGER][$trigger])) {
-            return $this->data[self::TRIGGER][$trigger];
-        }
-        return null;
+        return $this->data[self::TRIGGER][$trigger] ?? null;
     }
 
-    public function setTriggerData($trigger, $data)
+    public function setTriggerData($trigger, $data): void
     {
         $this->data[self::TRIGGER][$trigger] = $data;
         $this->save();
+    }
+
+    public function save(): void
+    {
+        file_put_contents($this->file, json_encode($this->data));
     }
 
     /**
@@ -128,23 +142,6 @@ class SessionStorage
             return $this->data[self::SESSION][$messageID][self::TRIGGER];
         }
         return null;
-    }
-
-    /**
-     * @return bool
-     */
-    protected function checkDirectory(): bool
-    {
-        if ( ! file_exists($this->dir)) {
-            return ! ( ! mkdir($this->dir)
-                && ! is_dir($this->dir));
-        }
-        return true;
-    }
-
-    public function save(): void
-    {
-        file_put_contents($this->file, json_encode($this->data));
     }
 
     /**

@@ -8,14 +8,14 @@ namespace isamarin\Alisa;
  */
 class Trigger
 {
-    private $name;
-    /** @var Trigger $next */
-    private $next = false;
     protected $words = [];
-    private $storeData = true;
     protected $default = false;
     protected $mistake = false;
     protected $start = false;
+    private $name;
+    /** @var Trigger $next */
+    private $next = false;
+    private $storeData = true;
 
     /**
      * Trigger constructor.
@@ -69,13 +69,12 @@ class Trigger
     }
 
     /**
-     *  @version с 1.5.0-beta по умолчанию все триггеры сохраняют данные
-     * @param bool $shouldStore
-     * @deprecated
+     * Проверяет триггер на корректность
+     * @return bool
      */
-    public function setStoreData(bool $shouldStore): void
+    public function isValid(): bool
     {
-        $this->storeData = $shouldStore;
+        return $this->name ? true : false;
     }
 
     /**
@@ -85,6 +84,16 @@ class Trigger
     public function isStoreData(): bool
     {
         return $this->storeData;
+    }
+
+    /**
+     * @param bool $shouldStore
+     * @version с 1.5.0-beta по умолчанию все триггеры сохраняют данные
+     * @deprecated
+     */
+    public function setStoreData(bool $shouldStore): void
+    {
+        $this->storeData = $shouldStore;
     }
 
     /**
@@ -168,15 +177,6 @@ class Trigger
     public function isInit(): bool
     {
         return $this->start;
-    }
-
-    /**
-     * Проверяет триггер на корректность
-     * @return bool
-     */
-    public function isValid(): bool
-    {
-        return $this->name ? true : false;
     }
 
 

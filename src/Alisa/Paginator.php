@@ -31,12 +31,12 @@ class Paginator
         }
     }
 
-    public function setLimit(int $limit)
+    public function setLimit(int $limit): void
     {
         $this->limit = $limit;
     }
 
-    public function append(Button $button)
+    public function append(Button $button): void
     {
         if ($button->get()['hide'] === false) {
             $this->links[] = $button;
@@ -46,7 +46,7 @@ class Paginator
     }
 
     /** @internal */
-    public function getPaginated()
+    public function getPaginated(): array
     {
         $this->addServiceButtons();
         if ( ! empty($this->buttons)) {
@@ -55,7 +55,7 @@ class Paginator
         return $this->links;
     }
 
-    protected function addServiceButtons()
+    protected function addServiceButtons(): void
     {
         $currentCount = count($this->links);
 

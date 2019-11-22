@@ -17,6 +17,7 @@ class Button
     /** @var string $command */
     protected $link;
     protected $assign;
+    protected $attach = false;
 
     /**
      * Button constructor.
@@ -84,13 +85,22 @@ class Button
         return $this;
     }
 
-    public function assignDataTo(Trigger $trigger){
+    public function assignDataTo(Trigger $trigger): Button
+    {
         $this->assign = $trigger->getName();
         return $this;
     }
 
-    public function addPayload($payload){
+    public function attach(bool $toCurrent): Button
+    {
+        $this->attach = $toCurrent;
+        return $this;
+    }
+
+    public function addPayload($payload): Button
+    {
         $this->trigger['services'] = $payload;
+        return $this;
     }
 
     /**
@@ -107,7 +117,10 @@ class Button
         if ($this->link) {
             $res['link'] = $this->link;
         }
-        if ($this->assign){
+        if ($this->attach) {
+            $res['payload']['ATTACH'] = $this->attach;
+        }
+        if ($this->assign) {
             $res['payload']['ASSIGN'] = $this->assign;
         }
         $res['hide'] = $this->hide;

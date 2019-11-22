@@ -24,16 +24,15 @@
   ],
   "require": {
     "nqxcode/phpmorphy": "^1.0",
-    "ext-mysqli": "*",
+    "guzzlehttp/guzzle": "6.4.*",
     "oefenweb/damerau-levenshtein": "3.0.*",
     "phpmorphy/dicts": "^1",
+    "ext-mysqli": "*",
     "php": "^7.1",
     "ext-json": "*",
     "ext-mbstring": "*",
     "ext-curl": "*",
-    "ext-openssl": "*",
-    "phpunit/phpunit": "^7.5",
-    "guzzlehttp/guzzle": "6.4.*"
+    "ext-openssl": "*"
   },
   "autoload": {
     "psr-4": {

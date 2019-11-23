@@ -70,7 +70,7 @@ class Paginator
             $less = $currentCount - ($this->topage * $this->limit);
             if ($less !== 0 && $this->topage !== 1) {
                 $back = new Button();
-                $back->setTitle('Назад');
+                $back->setTitle('← Назад');
                 $back->linkTrigger($this->prevTrigger);
                 $back->setHide(false);
                 $back->addPayload([

@@ -69,12 +69,14 @@ class SessionStorage
      * @param string $triggerName
      * @param $data
      */
-    public function storeTrigger(string $triggerName, $data, $replaceTrigger = null): void
+    public function storeTrigger(Trigger $trigger, $data, $replaceTrigger = null): void
     {
-        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER] = $triggerName;
+        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NAME'] = $trigger->getName();
         $this->data[self::SESSION][$this->request->getMessageID()][self::DATA] = $data;
-
-        $this->data[self::TRIGGER][$triggerName] = $data;
+        if ($trigger->hasNextTrigger()){
+            $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NEXT'] = $trigger->getNextTrigger()->getName();
+        }
+        $this->data[self::TRIGGER][$trigger->getName()] = $data;
         if ($replaceTrigger) {
             $this->data[self::TRIGGER][$replaceTrigger] = $data;
         }
@@ -125,7 +127,7 @@ class SessionStorage
     /**
      * @return string
      */
-    public function getPreviousTrigger(): string
+    public function getPreviousTrigger(): array
     {
         if ($this->request->getMessageID() !== 0) {
             return $this->data[self::SESSION][$this->request->getMessageID() - 1][self::TRIGGER];

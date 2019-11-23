@@ -36,6 +36,8 @@ class Alisa
 
     protected $alghoritm;
 
+    protected $repeat;
+
 
     /**
      * Alisa constructor.
@@ -156,11 +158,11 @@ class Alisa
 
         $utterance = $this->request->getUtterance();
         if ($this->request->isNewSession()) {
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), 'new session');
+            $this->storage->storeTrigger($this->recognizedCommand, 'new session');
         } elseif ($this->recognizedCommand) {
             $replaced = null;
             if ($this->directionType === DirectionType::BACKWARD) {
-                $replaced = $this->storage->getPreviousTrigger();
+                $replaced = $this->storage->getPreviousTrigger()['NAME'];
                 if ($this->triggers->getByName($replaced)->isDefault()) {
                     $replaced = null;
                 }
@@ -173,7 +175,7 @@ class Alisa
                 }
             }
 
-            $this->storage->storeTrigger($this->recognizedCommand->getName(), $utterance, $replaced);
+            $this->storage->storeTrigger($this->recognizedCommand, $utterance, $replaced);
         }
         $this->storage->save();
     }
@@ -231,14 +233,11 @@ class Alisa
             return true;
         }
 
-        $previousTriggerName = $this->storage->getPreviousTrigger();
-        if ($previousTriggerName) {
-            $_previousCommand = $this->triggers->getByName($previousTriggerName);
-            if ($_previousCommand->hasNextTrigger()) {
-                $this->recognizedCommand = $_previousCommand->getNextTrigger();
-                //  $this->storage->setItem($this->request->getUtterance(), $this->recognizedCommand->getName());
-                return true;
-            }
+        /** @var array $arPreviousTrigger */
+        $arPreviousTrigger = $this->storage->getPreviousTrigger();
+        if ($arPreviousTrigger && isset($arPreviousTrigger['NEXT'])) {
+            $this->recognizedCommand = $this->triggers->getByName($arPreviousTrigger['NEXT']);
+            return true;
         }
 
         $this->recognizeCommand();
@@ -262,6 +261,14 @@ class Alisa
         }
     }
 
+    public function isRepeatedRequest()
+    {
+        if ($this->recognizedCommand && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @param Trigger $trigger
      * @param callable $func
@@ -270,8 +277,15 @@ class Alisa
     {
 
         if ($trigger === $this->recognizedCommand) {
+
+
             /** @var Response $answer */
             $answer = $func();
+            if ($this->repeat) {
+                $this->recognizedCommand->nextDelegate($this->recognizedCommand);
+                $this->storage->storeTrigger($this->recognizedCommand,
+                    $this->storage->getTriggerData($this->recognizedCommand->getName()));
+            }
             $response = $this->request->getServiceData();
             if ( ! $this->request->isNewSession()) {
                 $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand);
@@ -337,6 +351,11 @@ class Alisa
     public function getTriggerData(string $triggerName)
     {
         return $this->storage->getTriggerData($triggerName);
+    }
+
+    public function setRepeat(bool $bRepeatTrigger)
+    {
+        $this->repeat = $bRepeatTrigger;
     }
 
     /**

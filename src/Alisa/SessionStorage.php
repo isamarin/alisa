@@ -107,6 +107,7 @@ class SessionStorage
     public function setItem($key, $item): void
     {
         $this->data[self::COMMON][$key] = $item;
+        $this->save();
     }
 
     /**

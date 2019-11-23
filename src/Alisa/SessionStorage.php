@@ -80,6 +80,7 @@ class SessionStorage
         if ($replaceTrigger) {
             $this->data[self::TRIGGER][$replaceTrigger] = $data;
         }
+        $this->save();
     }
 
     /**
@@ -91,6 +92,10 @@ class SessionStorage
         return $this->data[self::TRIGGER][$trigger] ?? null;
     }
 
+    /**
+     * @param $trigger
+     * @param $data
+     */
     public function setTriggerData($trigger, $data): void
     {
         $this->data[self::TRIGGER][$trigger] = $data;

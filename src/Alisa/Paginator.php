@@ -20,10 +20,12 @@ class Paginator
     protected $topage;
     protected $current;
     protected $prevTrigger;
+    protected $keepData;
 
 
-    public function __construct($requestPayload, $prevTrigger)
+    public function __construct($requestPayload, $prevTrigger,$keepPreviosData)
     {
+        $this->keepData = $keepPreviosData;
         $this->payload = $requestPayload;
         $this->prevTrigger = $prevTrigger;
         if (array_key_exists('services', $this->payload)) {
@@ -75,6 +77,7 @@ class Paginator
                 $back->setHide(false);
                 $back->addPayload([
                     'topage' => $this->topage - 1,
+                    'keepdata'=>$this->keepData,
                 ]);
                 $this->links[] = $back;
             }
@@ -85,6 +88,7 @@ class Paginator
                 $more->setHide(false);
                 $more->addPayload([
                     'topage' => $this->topage + 1,
+                    'keepdata'=>$this->keepData,
                 ]);
                 $this->links[] = $more;
             }

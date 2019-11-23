@@ -83,10 +83,10 @@ class Response
      * Не использовать!
      * @internal
      */
-    public function serviceActions($payload, $recognized): void
+    public function serviceActions($payload, $recognized,$keepPreviosData): void
     {
         if ($this->paginatorLength) {
-            $pag = new Paginator($payload, $recognized);
+            $pag = new Paginator($payload, $recognized,$keepPreviosData);
             $pag->setLimit($this->paginatorLength);
             foreach ($this->buttons as $button) {
                 $pag->append($button);

@@ -305,6 +305,13 @@ class Alisa
         die(json_encode($response));
     }
 
+    public function rewriteTriggerData($triggerName, $data)
+    {
+        if ($triggerName && $data && $this->storage->getTriggerData($triggerName)) {
+            $this->storage->setTriggerData($triggerName, $data);
+        }
+    }
+
     /**
      * @return Request
      */

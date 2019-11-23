@@ -307,7 +307,7 @@ class Alisa
 
     public function rewriteTriggerData($triggerName, $data)
     {
-        if ($triggerName && $data && $this->storage->getTriggerData($triggerName)) {
+        if ($triggerName && $data && $this->triggers->getByName($triggerName)) {
             $this->storage->setTriggerData($triggerName, $data);
         }
     }

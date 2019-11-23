@@ -263,7 +263,9 @@ class Alisa
 
     public function isRepeatedRequest()
     {
-        if ($this->recognizedCommand && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
+        if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()['NEXT'])
+            && $this->storage->getPreviousTrigger()['NEXT'] === $this->recognizedCommand->getName()
+            && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
             return true;
         }
         return false;

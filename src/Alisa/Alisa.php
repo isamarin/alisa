@@ -232,8 +232,6 @@ class Alisa
             if (array_key_exists('ASSIGN', $button)) {
                 $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
             }
-
-
             return true;
         }
 
@@ -294,8 +292,7 @@ class Alisa
             }
             $response = $this->request->getServiceData();
             if ( ! $this->request->isNewSession()) {
-                $keepPreviosData = $this->storage->getTriggerData($this->storage->getPreviousTrigger()['NAME']);
-                $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand, $keepPreviosData);
+                $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand, $this->storage->getTriggerData($this->recognizedCommand->getName()));
             }
             $response['response'] = $answer->send($this->recognizedCommand);
             $this->storage->save();

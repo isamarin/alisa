@@ -26,6 +26,7 @@ class Paginator
     public function __construct($requestPayload, $prevTrigger,$keepPreviosData)
     {
         $this->keepData = $keepPreviosData;
+        writeLog('PAG HAS WITH KEEP',$keepPreviosData);
         $this->payload = $requestPayload;
         $this->prevTrigger = $prevTrigger;
         if (array_key_exists('services', $this->payload)) {
@@ -92,7 +93,6 @@ class Paginator
                 ]);
                 $this->links[] = $more;
             }
-
         }
     }
 }

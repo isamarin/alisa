@@ -49,9 +49,25 @@ class Response
      */
     public function addButton(Button ... $buttons): self
     {
+        $this->merge($buttons);
+        return $this;
+    }
+
+    /**
+     * @param $buttons
+     */
+    protected function merge($buttons){
         if ($buttons) {
             $this->buttons = array_merge($this->buttons, $buttons);
         }
+    }
+
+    /**
+     * @param array $buttons
+     * @return $this
+     */
+    public function addButtonsArray(array $buttons){
+        $this->merge($buttons);
         return $this;
     }
 

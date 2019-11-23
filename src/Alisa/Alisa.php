@@ -305,9 +305,9 @@ class Alisa
         die(json_encode($response));
     }
 
-    public function storeTriggerData($triggerName, $data)
+    public function appendDataToTrigger($triggerName, $data)
     {
-        if ($triggerName && $data && $this->triggers->getByName($triggerName)) {
+        if ($triggerName && $data && $this->triggers->getByName($triggerName) && ! $this->storage->getTriggerData($triggerName)) {
             $this->storage->setTriggerData($triggerName, $data);
         }
     }

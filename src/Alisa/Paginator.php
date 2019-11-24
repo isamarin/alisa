@@ -2,7 +2,6 @@
 
 namespace isamarin\Alisa;
 
-use function array_key_exists;
 use function array_slice;
 use function count;
 
@@ -23,12 +22,12 @@ class Paginator
     protected $keepData;
 
 
-    public function __construct($requestPayload, $prevTrigger,$keepPreviosData)
+    public function __construct($requestPayload, $prevTrigger, $keepPreviosData)
     {
         $this->keepData = $keepPreviosData;
         $this->payload = $requestPayload;
         $this->prevTrigger = $prevTrigger;
-        if (array_key_exists('services', $this->payload)) {
+        if (isset($this->payload['services'])) {
             $this->topage = $this->payload['services']['topage'];
         }
     }
@@ -77,8 +76,8 @@ class Paginator
                 $back->setHide(false);
                 $back->addPayload([
                     'topage' => $this->topage - 1,
-                    'keepdata'=>$this->keepData,
-                    'repeat'=>true,
+                    'keepdata' => $this->keepData,
+                    'repeat' => true,
                 ]);
                 $this->links[] = $back;
             }
@@ -89,8 +88,8 @@ class Paginator
                 $more->setHide(false);
                 $more->addPayload([
                     'topage' => $this->topage + 1,
-                    'keepdata'=>$this->keepData,
-                    'repeat'=>true,
+                    'keepdata' => $this->keepData,
+                    'repeat' => true,
                 ]);
                 $this->links[] = $more;
             }

@@ -82,6 +82,13 @@ class Response
     }
 
     /**
+     *
+     */
+    public function resetButtons(){
+        $this->buttons = [];
+    }
+
+    /**
      * Не использовать!
      * @internal
      */

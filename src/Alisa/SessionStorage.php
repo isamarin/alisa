@@ -91,7 +91,7 @@ class SessionStorage
 
     /**
      * @param $trigger
-     * @return |null |null |null
+     * @return |null |null |null |null |null
      */
     public function getTriggerData($trigger)
     {
@@ -143,7 +143,7 @@ class SessionStorage
 
     /**
      * @param $messageID
-     * @return |null |null |null |null |null
+     * @return string|null
      */
     public function getTriggerByMessageID($messageID)
     {

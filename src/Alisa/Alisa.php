@@ -345,7 +345,7 @@ class Alisa
      * @param $triggerName
      * @param bool $saveCurrentSession
      */
-    public function substituteTriggerTo($triggerName, $saveCurrentSession = false): void
+    public function substituteTriggerTo($triggerName, $saveCurrentSession = null): void
     {
         if ($this->recognizedCommand) {
             $subsTo = $this->triggers->getByName($triggerName);

@@ -4,14 +4,14 @@
 ```php
 //По умолчанию
 $bot = new Alisa('NAME');
-$bot->setDictionaryPath($_SERVER['DOCUMENT_ROOT']) . '/dicts/';
+$bot->setDictionaryPath($_SERVER['DOCUMENT_ROOT'] . '/dicts/');
 ```
 
 ### Директория хранения сессий
 ```php
 //По умолчанию
 $bot = new Alisa('NAME');
-$bot->setDictionaryPath($_SERVER['DOCUMENT_ROOT']) . '/sessions/';
+$bot->setDictionaryPath($_SERVER['DOCUMENT_ROOT'] . '/sessions/');
 ```
 
 

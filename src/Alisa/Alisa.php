@@ -211,15 +211,12 @@ class Alisa
      */
     protected function getCommand(): bool
     {
-        if ($this->request->isSubstitued()) {
-            $this->recognizedCommand = $this->triggers->getByName($this->request->isSubstitued()['to']);
-            return true;
-        }
         /* Первое сообщение – приветствие */
         if ($this->request->getMessageID() === 0) {
             $this->recognizedCommand = $this->helloCommand;
             return true;
         }
+
         /* Проверяем клик ли это на кнопку */
         if ($this->request->isButtonClick()) {
             $button = $this->request->getPayloadData();
@@ -235,6 +232,12 @@ class Alisa
             }
             return true;
         }
+
+        if ($this->request->isSubstitued()) {
+            $this->recognizedCommand = $this->triggers->getByName($this->request->isSubstitued()['to']);
+            return true;
+        }
+
 
         /** @var array $arPreviousTrigger */
         $arPreviousTrigger = $this->storage->getPreviousTrigger();

@@ -38,6 +38,8 @@ class Alisa
 
     protected $repeat;
 
+    protected $watchers;
+
 
     /**
      * Alisa constructor.
@@ -295,6 +297,12 @@ class Alisa
 
             /** @var Response $answer */
             $answer = $func();
+            if ($this->watchers) {
+                foreach ($this->watchers as $watcher) {
+                    /** @var callable $watcher */
+                    $res = $watcher($answer);
+                }
+            }
             if ($this->repeat) {
                 $this->recognizedCommand->nextDelegate($this->recognizedCommand);
                 $this->storage->storeTrigger($this->recognizedCommand,
@@ -309,6 +317,11 @@ class Alisa
             $this->storage->save();
             die(json_encode($response));
         }
+    }
+
+    protected function modifyResponse($old, $new)
+    {
+
     }
 
     /**
@@ -366,6 +379,11 @@ class Alisa
     public function getTriggerData(string $triggerName)
     {
         return $this->storage->getTriggerData($triggerName);
+    }
+
+    public function addResponseModifier(callable $function)
+    {
+        $this->watchers[] = $function;
     }
 
     public function setRepeat(bool $bRepeatTrigger)

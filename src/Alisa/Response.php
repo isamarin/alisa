@@ -56,7 +56,8 @@ class Response
     /**
      * @param $buttons
      */
-    protected function merge($buttons){
+    protected function merge($buttons)
+    {
         if ($buttons) {
             $this->buttons = array_merge($this->buttons, $buttons);
         }
@@ -66,7 +67,8 @@ class Response
      * @param array $buttons
      * @return $this
      */
-    public function addButtonsArray(array $buttons){
+    public function addButtonsArray(array $buttons)
+    {
         $this->merge($buttons);
         return $this;
     }
@@ -83,10 +85,10 @@ class Response
      * Не использовать!
      * @internal
      */
-    public function serviceActions($payload, $recognized,$keepPreviosData): void
+    public function serviceActions($payload, $recognized, $keepPreviosData): void
     {
         if ($this->paginatorLength) {
-            $pag = new Paginator($payload, $recognized,$keepPreviosData);
+            $pag = new Paginator($payload, $recognized, $keepPreviosData);
             $pag->setLimit($this->paginatorLength);
             foreach ($this->buttons as $button) {
                 $pag->append($button);

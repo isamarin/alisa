@@ -245,7 +245,7 @@ $bot->sendResponse($chooseMeds, static function () use ($bot) {
             $bot->setRepeat(true);
         } else {
             //Все ок, выход из триггера
-            $answer->addText('Ты сделал правильный выбор о_о');
+            $answer->addText('Ты сделал правильный выбор о-о');
         }
     }
     return $answer;

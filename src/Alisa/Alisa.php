@@ -300,7 +300,10 @@ class Alisa
             if ($this->watchers) {
                 foreach ($this->watchers as $watcher) {
                     /** @var callable $watcher */
-                    $res = $watcher($answer);
+                    $modfiedAnswer = $watcher($answer);
+                    if ($modfiedAnswer instanceof Response){
+                        $answer = $this->modifyResponse($answer, $modfiedAnswer);
+                    }
                 }
             }
             if ($this->repeat) {
@@ -319,9 +322,9 @@ class Alisa
         }
     }
 
-    protected function modifyResponse($old, $new)
+    protected function modifyResponse(Response $old, Response $new): Response
     {
-
+        return $old->addButtonsArray($new->getButtons());
     }
 
     /**

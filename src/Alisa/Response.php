@@ -81,6 +81,11 @@ class Response
         $this->paginatorLength = $length;
     }
 
+    public function getButtons()
+    {
+        return $this->buttons;
+    }
+
     /**
      *
      */

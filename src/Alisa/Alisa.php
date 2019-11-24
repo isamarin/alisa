@@ -39,6 +39,9 @@ class Alisa
     protected $repeat;
 
     protected $watchers;
+    protected $dictsPath;
+
+    protected $sessionPath;
 
 
     /**
@@ -54,6 +57,26 @@ class Alisa
         $this->storage = new SessionStorage($this->request);
         $this->directionType = DirectionType::BACKWARD;
         $this->alghoritm = new MorphyRecognition();
+        $this->sessionPath = $_SERVER['DOCUMENT_ROOT'] . '/sessions/';
+        $this->dictsPath = $_SERVER['DOCUMENT_ROOT'] . '/dicts/';
+    }
+
+    /**
+     * Путь до морфологического словаря
+     * @param $path
+     */
+    public function setDictionaryPath($path)
+    {
+        $this->dictsPath = $path;
+    }
+
+    /**
+     * Путь сохранения сессий
+     * @param $path
+     */
+    public function setSessionsPath($path)
+    {
+        $this->sessionPath = $path;
     }
 
 

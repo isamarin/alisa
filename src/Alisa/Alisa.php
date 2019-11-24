@@ -39,9 +39,6 @@ class Alisa
     protected $repeat;
 
     protected $watchers;
-    protected $dictsPath;
-
-    protected $sessionPath;
 
 
     /**
@@ -67,7 +64,7 @@ class Alisa
      */
     public function setDictionaryPath($path)
     {
-        $this->dictsPath = $path;
+        $GLOBALS['DICTS_PATH'] = $path;
     }
 
     /**
@@ -76,7 +73,7 @@ class Alisa
      */
     public function setSessionsPath($path)
     {
-        $this->sessionPath = $path;
+        $GLOBALS['SES_PATH'] = $path;
     }
 
 

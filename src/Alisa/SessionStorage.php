@@ -35,7 +35,7 @@ class SessionStorage
      */
     public function __construct(Request $request)
     {
-        $this->dir = $_SERVER['DOCUMENT_ROOT'] . '/sessions/';
+        $this->dir = $GLOBALS['SES_PATH'] ?: $_SERVER['DOCUMENT_ROOT'] . '/sessions/';
         if ($this->checkDirectory()) {
             $this->request = $request;
             $this->getData();

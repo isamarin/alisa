@@ -97,7 +97,7 @@ class Response
     {
         foreach ($this->buttons as $key => $currentButton) {
             /** @var Button $currentButton */
-            if ($button->__toString() === $currentButton->__toString()) {
+            if ((string)$button === (string)$currentButton) {
                 unset($this->buttons[$key]);
             }
         }

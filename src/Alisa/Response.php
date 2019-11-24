@@ -125,6 +125,7 @@ class Response
     public function send(Trigger $recognized): array
     {
         $rawButtons = [];
+        $this->buttons = array_unique($this->buttons);
         foreach ($this->buttons as $button) {
             /** @var Button $button */
             $raw = $button->get();

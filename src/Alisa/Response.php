@@ -84,8 +84,23 @@ class Response
     /**
      *
      */
-    public function resetButtons(){
+    public function resetButtons()
+    {
         $this->buttons = [];
+    }
+
+    /**
+     * @param Button $button
+     */
+
+    public function deleteButton(Button $button)
+    {
+        foreach ($this->buttons as $key => $currentButton) {
+            /** @var Button $currentButton */
+            if ($button->__toString() === $currentButton->__toString()) {
+                unset($this->buttons[$key]);
+            }
+        }
     }
 
     /**

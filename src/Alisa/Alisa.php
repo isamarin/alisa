@@ -173,7 +173,7 @@ class Alisa
                 if (isset($this->request->getPayloadData()['ATTACH'])) {
                     $replaced = $this->request->getPayloadData()['ATTACH'];
                 }
-                if (isset($this->request->getPayloadData()['services']['keepdata'])){
+                if (isset($this->request->getPayloadData()['services']['keepdata'])) {
                     $utterance = $this->request->getPayloadData()['services']['keepdata'];
                     $replaced = null;
                 }
@@ -231,7 +231,7 @@ class Alisa
                 $this->storage->setTriggerData($this->storage->getPreviousTrigger(), $this->request->getUtterance());
             }
             if (array_key_exists('ASSIGN', $button)) {
-               $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
+                $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
             }
             return true;
         }
@@ -274,6 +274,9 @@ class Alisa
             && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
             return true;
         }
+        if (isset($this->request->getPayloadData()['services']['reepat']) && $this->request->getPayloadData()['services']['repeat']) {
+            return true;
+        }
         return false;
     }
 
@@ -296,7 +299,8 @@ class Alisa
             }
             $response = $this->request->getServiceData();
             if ( ! $this->request->isNewSession()) {
-                $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand, $this->storage->getTriggerData($this->recognizedCommand->getName()));
+                $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand,
+                    $this->storage->getTriggerData($this->recognizedCommand->getName()));
             }
             $response['response'] = $answer->send($this->recognizedCommand);
             $this->storage->save();

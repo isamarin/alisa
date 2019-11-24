@@ -78,6 +78,7 @@ class Paginator
                 $back->addPayload([
                     'topage' => $this->topage - 1,
                     'keepdata'=>$this->keepData,
+                    'repeat'=>true,
                 ]);
                 $this->links[] = $back;
             }
@@ -89,6 +90,7 @@ class Paginator
                 $more->addPayload([
                     'topage' => $this->topage + 1,
                     'keepdata'=>$this->keepData,
+                    'repeat'=>true,
                 ]);
                 $this->links[] = $more;
             }

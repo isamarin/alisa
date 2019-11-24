@@ -13,7 +13,6 @@
     "nqxcode/phpmorphy": "^1.0",
     "guzzlehttp/guzzle": "6.4.*",
     "oefenweb/damerau-levenshtein": "3.0.*",
-    "phpmorphy/dicts": "^1",
     "ext-mysqli": "*",
     "php": "^7.1",
     "ext-json": "*",

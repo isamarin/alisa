@@ -108,7 +108,7 @@ $coffeTrigger->addTokens(['дай','хочу','налей'],['кофе']);
 
 ```php
 $greenTea->addTokens(['Налей зеленого чая'],['Хочу зеленого чая'],['Дай зеленый чай']);
-$blackTeas->assTokens(['Налей чергого чая'],['Хочу черного чая'],['Дай черный чай']);
+$blackTeas->addTokens(['Налей чергого чая'],['Хочу черного чая'],['Дай черный чай']);
 $coffeTrigger->addTokens(['Налей кофе'],['Хочу кофе'],['Дай кофе']);
 ```
 Плюсы:
@@ -132,9 +132,9 @@ $yoTrigger = new Trigger('YEARS');
 $nameTrigger->setTokens(['давай','хочу','может'],['знакомиться','познакомиться','представлюсь']);
 
 //Привязываем следующие триггеры
-$nameTrigger->setNextTrigger($sNameTrigger);
-$sNameTrigger->setNextTrigger($yoTrigger);
-$yoTrigger->setNextTrigger($personTrigger);
+$nameTrigger->nextDelegate($sNameTrigger);
+$sNameTrigger->nextDelegate($yoTrigger);
+$yoTrigger->nextDelegate($personTrigger);
 ```
 Для каждого из триггеров нужно создать обработчик с вопросом. При запросе пользователя "Ну давай познакомимся" сработает триггер $nameTrigger. Для триггеров $sNameTrigger и $yoTrigger токены не нужны (в общем то в данном случае они и не смогут сработать, тк пользотваель будет передавать информацию, и в ней нельзя распознать команду), они будут вызваны автоматически друг за другом.
 

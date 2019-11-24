@@ -13,15 +13,6 @@ use function in_array;
  */
 class Alisa
 {
-    protected const NEXT = 'NEXT';
-    protected const NAME = 'NAME';
-    protected const SERVICES = 'services';
-    protected const REPEAT = 'repeat';
-    protected const ATTACH = 'attach';
-    protected const KEEPDATA = 'keepdata';
-    protected const TITLE = 'title';
-    protected const ASSIGN = 'ASSIGN';
-    protected const TOPAGE = 'topage';
     /** @var TriggerIterator $triggers */
     protected $triggers = [];
     /** @var Trigger $recornizedCommand */
@@ -171,19 +162,19 @@ class Alisa
         } elseif ($this->recognizedCommand) {
             $replaced = null;
             if ($this->directionType === DirectionType::BACKWARD) {
-                $replaced = $this->storage->getPreviousTrigger()[self::NAME];
+                $replaced = $this->storage->getPreviousTrigger()['NAME'];
                 if ($this->triggers->getByName($replaced)->isDefault()) {
                     $replaced = null;
                 }
             }
             if ($this->request->isButtonClick()) {
-                $utterance = $this->request->getPayloadData()[self::TITLE];
+                $utterance = $this->request->getPayloadData()['TITLE'];
 
-                if (isset($this->request->getPayloadData()[self::ATTACH])) {
-                    $replaced = $this->request->getPayloadData()[self::ATTACH];
+                if (isset($this->request->getPayloadData()['ATTACH'])) {
+                    $replaced = $this->request->getPayloadData()['ATTACH'];
                 }
-                if (isset($this->request->getPayloadData()[self::SERVICES][self::KEEPDATA])) {
-                    $utterance = $this->request->getPayloadData()[self::SERVICES][self::KEEPDATA];
+                if (isset($this->request->getPayloadData()['services']['keepdata'])) {
+                    $utterance = $this->request->getPayloadData()['services']['keepdata'];
                     $replaced = null;
                 }
             }
@@ -229,15 +220,15 @@ class Alisa
         /* Проверяем клик ли это на кнопку */
         if ($this->request->isButtonClick()) {
             $button = $this->request->getPayloadData();
-            if (array_key_exists(self::NAME, $button)) {
+            if (array_key_exists('NAME', $button)) {
                 $this->recognizedCommand = $this->triggers
-                    ->getByName($this->request->getPayloadData()[self::NAME]);
+                    ->getByName($this->request->getPayloadData()['NAME']);
             } else {
                 $this->recognizedCommand = $this->triggers->getDefaultTrigger();
                 $this->storage->setTriggerData($this->storage->getPreviousTrigger(), $this->request->getUtterance());
             }
-            if (array_key_exists(self::ASSIGN, $button)) {
-                $this->storage->setTriggerData($button[self::ASSIGN], $button['TITLE']);
+            if (array_key_exists('ASSIGN', $button)) {
+                $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
             }
             return true;
         }
@@ -250,8 +241,8 @@ class Alisa
 
         /** @var array $arPreviousTrigger */
         $arPreviousTrigger = $this->storage->getPreviousTrigger();
-        if ($arPreviousTrigger && isset($arPreviousTrigger[self::NEXT])) {
-            $this->recognizedCommand = $this->triggers->getByName($arPreviousTrigger[self::NEXT]);
+        if ($arPreviousTrigger && isset($arPreviousTrigger['NEXT'])) {
+            $this->recognizedCommand = $this->triggers->getByName($arPreviousTrigger['NEXT']);
             return true;
         }
 
@@ -281,12 +272,12 @@ class Alisa
      */
     public function isRepeatedRequest()
     {
-        if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()[self::NEXT])
-            && $this->storage->getPreviousTrigger()[self::NEXT] === $this->recognizedCommand->getName()
-            && $this->storage->getPreviousTrigger()[self::NAME] === $this->recognizedCommand->getName()) {
+        if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()['NEXT'])
+            && $this->storage->getPreviousTrigger()['NEXT'] === $this->recognizedCommand->getName()
+            && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
             return true;
         }
-        if (isset($this->request->getPayloadData()[self::SERVICES][self::REPEAT]) && $this->request->getPayloadData()[self::SERVICES][self::REPEAT]) {
+        if (isset($this->request->getPayloadData()['services']['repeat']) && $this->request->getPayloadData()['services']['repeat']) {
             return true;
         }
         return false;
@@ -382,11 +373,6 @@ class Alisa
         $this->repeat = $bRepeatTrigger;
     }
 
-    public function isPaginatorCall()
-    {
-        return isset($this->request->getPayloadData()[self::SERVICES][self::TOPAGE]);
-    }
-
     /**
      * @param $key
      * @return |null |null |null
@@ -396,4 +382,8 @@ class Alisa
         return $this->storage->getItem($key);
     }
 
+    public function isPaginatorCall()
+    {
+        return isset($this->request->getPayloadData()[self::SERVICES][self::TOPAGE]);
+    }
 }

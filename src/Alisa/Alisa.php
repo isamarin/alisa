@@ -173,6 +173,10 @@ class Alisa
                 if (isset($this->request->getPayloadData()['ATTACH'])) {
                     $replaced = $this->request->getPayloadData()['ATTACH'];
                 }
+                if (isset($this->request->getPayloadData()['services']['keepdata'])){
+                    $utterance = $this->request->getPayloadData()['services']['keepdata'];
+                    $replaced = null;
+                }
             }
 
             $this->storage->storeTrigger($this->recognizedCommand, $utterance, $replaced);
@@ -222,15 +226,12 @@ class Alisa
             if (array_key_exists('NAME', $button)) {
                 $this->recognizedCommand = $this->triggers
                     ->getByName($this->request->getPayloadData()['NAME']);
-                if (isset($button['services']['keepdata'])) {
-                    $this->storage->setTriggerData($button['NAME'], $button['services']['keepdata']);
-                }
             } else {
                 $this->recognizedCommand = $this->triggers->getDefaultTrigger();
                 $this->storage->setTriggerData($this->storage->getPreviousTrigger(), $this->request->getUtterance());
             }
             if (array_key_exists('ASSIGN', $button)) {
-                $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
+               $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
             }
             return true;
         }
@@ -263,6 +264,9 @@ class Alisa
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isRepeatedRequest()
     {
         if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()['NEXT'])

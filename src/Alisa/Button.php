@@ -115,6 +115,14 @@ class Button
     }
 
     /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return http_build_query($this->get());
+    }
+
+    /**
      * @return array
      */
     public function get(): array
@@ -137,14 +145,6 @@ class Button
         $res['hide'] = $this->hide;
 
         return $res;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return http_build_query($this->get());
     }
 
 }

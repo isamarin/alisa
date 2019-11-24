@@ -74,7 +74,7 @@ class SessionStorage
     {
         $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NAME'] = $trigger->getName();
         $this->data[self::SESSION][$this->request->getMessageID()][self::DATA] = $data;
-        if ($trigger->hasNextTrigger()){
+        if ($trigger->hasNextTrigger()) {
             $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NEXT'] = $trigger->getNextTrigger()->getName();
         }
         $this->data[self::TRIGGER][$trigger->getName()] = $data;
@@ -82,6 +82,11 @@ class SessionStorage
             $this->data[self::TRIGGER][$replaceTrigger] = $data;
         }
         $this->save();
+    }
+
+    public function save(): void
+    {
+        file_put_contents($this->file, json_encode($this->data));
     }
 
     /**
@@ -101,11 +106,6 @@ class SessionStorage
     {
         $this->data[self::TRIGGER][$trigger] = $data;
         $this->save();
-    }
-
-    public function save(): void
-    {
-        file_put_contents($this->file, json_encode($this->data));
     }
 
     /**

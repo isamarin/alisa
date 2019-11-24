@@ -299,7 +299,7 @@ class Alisa
                 foreach ($this->watchers as $watcher) {
                     /** @var callable $watcher */
                     $modfiedAnswer = $watcher($answer);
-                    if ($modfiedAnswer instanceof Response){
+                    if ($modfiedAnswer instanceof Response) {
                         $answer = $this->modifyResponse($answer, $modfiedAnswer);
                     }
                 }
@@ -327,12 +327,12 @@ class Alisa
      * Должен возвращать Alisa::Response если нужна замена
      * Может быть использован для установки каких либо значений в сессию или
      * перехвату нежелательных комманд с последующим делегированием
-     * @example Пользователь должен авторизоваться, прежде чем получить доступ к команде голосом,
-     * проверяем авторизован ли? Если нет то делегируем на другой триггер, например на триггер атворизации
-     *
      * @param Response $old
      * @param Response $new
      * @return Response
+     * @example Пользователь должен авторизоваться, прежде чем получить доступ к команде голосом,
+     * проверяем авторизован ли? Если нет то делегируем на другой триггер, например на триггер атворизации
+     *
      */
     protected function modifyResponse(Response $old, Response $new): Response
     {
@@ -365,6 +365,15 @@ class Alisa
     }
 
     /**
+     * Возвращает запрос, который был получен от Яндекс.Алиса
+     * @return Request
+     */
+    public function getRequest(): Request
+    {
+        return $this->request;
+    }
+
+    /**
      *
      * @param $triggerName
      * @param $data
@@ -377,19 +386,10 @@ class Alisa
     }
 
     /**
-     * Возвращает запрос, который был получен от Яндекс.Алиса
-     * @return Request
-     */
-    public function getRequest(): Request
-    {
-        return $this->request;
-    }
-
-    /**
      * Сохраняет какие-нибудь данные в рамках работы бота
-     * @see Alisa::getCommonData()
      * @param $data
      * @param $key
+     * @see Alisa::getCommonData()
      */
     public function storeCommonData($data, $key): void
     {
@@ -426,9 +426,9 @@ class Alisa
 
     /**
      * Возвращает данные, которые были вставлены в боте
-     * @see Alisa::storeCommonData()
      * @param $key
      * @return null|string
+     * @see Alisa::storeCommonData()
      */
     public function getCommonData($key): ?string
     {
@@ -437,8 +437,8 @@ class Alisa
 
     /**
      * Возвращает флаг, если пользователь использовал сервисные копнки пагинатора
-     * @see \isamarin\Alisa\Response::setButtonsPaginator()
      * @return bool
+     * @see \isamarin\Alisa\Response::setButtonsPaginator()
      */
     public function isPaginatorCall(): bool
     {

@@ -66,8 +66,9 @@ class SessionStorage
     }
 
     /**
-     * @param string $triggerName
+     * @param Trigger $trigger
      * @param $data
+     * @param null $replaceTrigger
      */
     public function storeTrigger(Trigger $trigger, $data, $replaceTrigger = null): void
     {
@@ -85,7 +86,7 @@ class SessionStorage
 
     /**
      * @param $trigger
-     * @return |null
+     * @return |null |null |null
      */
     public function getTriggerData($trigger)
     {
@@ -130,7 +131,7 @@ class SessionStorage
     }
 
     /**
-     * @return string
+     * @return array
      */
     public function getPreviousTrigger(): array
     {
@@ -142,7 +143,7 @@ class SessionStorage
 
     /**
      * @param $messageID
-     * @return |null |null |null
+     * @return |null |null |null |null |null
      */
     public function getTriggerByMessageID($messageID)
     {

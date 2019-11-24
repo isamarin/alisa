@@ -74,7 +74,6 @@ class Button
     /**
      * Связывает триггер, который сработает при нажатии на кнопку
      * @param Trigger $trigger
-     * @param string $data
      * @return Button
      */
     public function linkTrigger(Trigger $trigger): Button
@@ -85,18 +84,30 @@ class Button
         return $this;
     }
 
+    /**
+     * @param Trigger $trigger
+     * @return Button
+     */
     public function assignDataTo(Trigger $trigger): Button
     {
         $this->assign = $trigger->getName();
         return $this;
     }
 
+    /**
+     * @param bool $toCurrent
+     * @return Button
+     */
     public function attach(bool $toCurrent): Button
     {
         $this->attach = $toCurrent;
         return $this;
     }
 
+    /**
+     * @param $payload
+     * @return Button
+     */
     public function addPayload($payload): Button
     {
         $this->trigger['services'] = $payload;
@@ -128,6 +139,9 @@ class Button
         return $res;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return http_build_query($this->get());

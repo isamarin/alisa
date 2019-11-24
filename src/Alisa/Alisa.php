@@ -119,8 +119,6 @@ class Alisa
 
     /**
      * @param Trigger ...$trigger
-     * TODO
-     * исправить работу итератора при пропуске дефолтных триггеров
      */
     public function addTrigger(Trigger ... $trigger): void
     {
@@ -208,8 +206,6 @@ class Alisa
 
     /**
      * @return bool
-     * TODO
-     * reduce returns
      */
     protected function getCommand(): bool
     {
@@ -258,7 +254,8 @@ class Alisa
     }
 
     /**
-     *
+     * Устаналивает направление складирования сессии.
+     * По умолчанию – задом наперед.
      * @param $direction
      * @throws ReflectionException
      */
@@ -270,13 +267,14 @@ class Alisa
     }
 
     /**
+     * Возвращает флаг, является ли данный запрос самоповтором одного из триггеров
      * @return bool
      */
-    public function isRepeatedRequest()
+    public function isRepeatedRequest(): bool
     {
         if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()['NEXT'])
             && $this->storage->getPreviousTrigger()['NEXT'] === $this->recognizedCommand->getName()
-            && $this->storage->getPreviousTrigger()['NAME'] === $this->recognizedCommand->getName()) {
+            && $this->recognizedCommand->getName() === $this->storage->getPreviousTrigger()['NAME']) {
             return true;
         }
         if (isset($this->request->getPayloadData()['services']['repeat']) && $this->request->getPayloadData()['services']['repeat']) {
@@ -322,12 +320,28 @@ class Alisa
         }
     }
 
+
+    /**
+     * Глобалный модифиактор для ответа. Позволяет обрабатывать условия
+     * и дополнять кнопками ответ
+     * Должен возвращать Alisa::Response если нужна замена
+     * Может быть использован для установки каких либо значений в сессию или
+     * перехвату нежелательных комманд с последующим делегированием
+     * @example Пользователь должен авторизоваться, прежде чем получить доступ к команде голосом,
+     * проверяем авторизован ли? Если нет то делегируем на другой триггер, например на триггер атворизации
+     *
+     * @param Response $old
+     * @param Response $new
+     * @return Response
+     */
     protected function modifyResponse(Response $old, Response $new): Response
     {
         return $old->addButtonsArray($new->getButtons());
     }
 
     /**
+     * Делегирует исполнение теущего распознаного трииггера другому триггеру.
+     * Пользователю отправляется только последний делегированный триггер
      * @param $triggerName
      * @param bool $saveCurrentSession
      */
@@ -350,7 +364,12 @@ class Alisa
         die(json_encode($response));
     }
 
-    public function appendDataToTrigger($triggerName, $data)
+    /**
+     *
+     * @param $triggerName
+     * @param $data
+     */
+    public function appendDataToTrigger($triggerName, $data): void
     {
         if ($triggerName && $data && $this->triggers->getByName($triggerName) && ! $this->storage->getTriggerData($triggerName)) {
             $this->storage->setTriggerData($triggerName, $data);
@@ -358,6 +377,7 @@ class Alisa
     }
 
     /**
+     * Возвращает запрос, который был получен от Яндекс.Алиса
      * @return Request
      */
     public function getRequest(): Request
@@ -366,6 +386,8 @@ class Alisa
     }
 
     /**
+     * Сохраняет какие-нибудь данные в рамках работы бота
+     * @see Alisa::getCommonData()
      * @param $data
      * @param $key
      */
@@ -384,27 +406,42 @@ class Alisa
         return $this->storage->getTriggerData($triggerName);
     }
 
-    public function addResponseModifier(callable $function)
+    /**
+     * @param callable $function
+     */
+    public function addResponseModifier(callable $function): void
     {
         $this->watchers[] = $function;
     }
 
-    public function setRepeat(bool $bRepeatTrigger)
+    /**
+     * Устаналивает флаг самоповтора – триггер после отправки данных укажет, что пользотвальские
+     * данные нужно переправить обратно на этот же триггер
+     * @param bool $bRepeatTrigger
+     */
+    public function setRepeat(bool $bRepeatTrigger): void
     {
         $this->repeat = $bRepeatTrigger;
     }
 
     /**
+     * Возвращает данные, которые были вставлены в боте
+     * @see Alisa::storeCommonData()
      * @param $key
-     * @return |null |null |null
+     * @return null|string
      */
-    public function getCommonData($key)
+    public function getCommonData($key): ?string
     {
         return $this->storage->getItem($key);
     }
 
-    public function isPaginatorCall()
+    /**
+     * Возвращает флаг, если пользователь использовал сервисные копнки пагинатора
+     * @see \isamarin\Alisa\Response::setButtonsPaginator()
+     * @return bool
+     */
+    public function isPaginatorCall(): bool
     {
-        return isset($this->request->getPayloadData()[self::SERVICES][self::TOPAGE]);
+        return isset($this->request->getPayloadData()['services']['topage']);
     }
 }

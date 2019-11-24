@@ -15,7 +15,6 @@ class Response
 
     /**
      * Response constructor.
-     * @param $recognized
      */
     public function __construct()
     {
@@ -56,7 +55,7 @@ class Response
     /**
      * @param $buttons
      */
-    protected function merge($buttons)
+    protected function merge($buttons): void
     {
         if ($buttons) {
             $this->buttons = array_merge($this->buttons, $buttons);
@@ -67,7 +66,7 @@ class Response
      * @param array $buttons
      * @return $this
      */
-    public function addButtonsArray(array $buttons)
+    public function addButtonsArray(array $buttons): self
     {
         $this->merge($buttons);
         return $this;
@@ -81,7 +80,10 @@ class Response
         $this->paginatorLength = $length;
     }
 
-    public function getButtons()
+    /**
+     * @return array
+     */
+    public function getButtons(): array
     {
         return $this->buttons;
     }
@@ -89,7 +91,7 @@ class Response
     /**
      *
      */
-    public function resetButtons()
+    public function resetButtons(): void
     {
         $this->buttons = [];
     }
@@ -98,7 +100,7 @@ class Response
      * @param Button $button
      */
 
-    public function deleteButton(Button $button)
+    public function deleteButton(Button $button): void
     {
         foreach ($this->buttons as $key => $currentButton) {
             /** @var Button $currentButton */
@@ -110,6 +112,9 @@ class Response
 
     /**
      * Не использовать!
+     * @param $payload
+     * @param $recognized
+     * @param $keepPreviosData
      * @internal
      */
     public function serviceActions($payload, $recognized, $keepPreviosData): void
@@ -125,6 +130,7 @@ class Response
     }
 
     /**
+     * @param Trigger $recognized
      * @return array
      */
     public function send(Trigger $recognized): array

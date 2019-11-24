@@ -22,6 +22,12 @@ class Paginator
     protected $keepData;
 
 
+    /**
+     * Paginator constructor.
+     * @param $requestPayload
+     * @param $prevTrigger
+     * @param $keepPreviosData
+     */
     public function __construct($requestPayload, $prevTrigger, $keepPreviosData)
     {
         $this->keepData = $keepPreviosData;
@@ -32,11 +38,17 @@ class Paginator
         }
     }
 
+    /**
+     * @param int $limit
+     */
     public function setLimit(int $limit): void
     {
         $this->limit = $limit;
     }
 
+    /**
+     * @param Button $button
+     */
     public function append(Button $button): void
     {
         if ($button->get()['hide'] === false) {

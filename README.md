@@ -77,7 +77,7 @@ $mistakeTrigger->setAsMistake(true);
 //Отправляем ответ, если распознан $mistakeTrigger
 $bot->sendResponse($mistakeTrigger,static function(){
     $answer = new Answer();
-    $answer->addText('Не удалось понять вашу команды :( ');
+    $answer->addText('Не удалось понять вашу команду :( ');
     return $answer;
 );
 ```

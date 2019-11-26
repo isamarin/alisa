@@ -126,18 +126,41 @@ $coffeTrigger->linkTokens(['Налей кофе'],['Хочу кофе'],['Дай
 В случаях, когда бот используется для последовательного выполнения команд, можно привязать к триггеру следующий триггер. Например если нужно собрать какую-либо информацию от пользователя, например имя, фамилию итд.
 
 ```php
-//Деклаириуем триггеры
+// Декларируем триггеры
 $nameTrigger = new Trigger('NAME');
 $sNameTrigger = new Trigger('SECOND_NAME');
 $yoTrigger = new Trigger('YEARS');
+$personTrigger = new Trigger('PERSON');
 
-//Назначаем токены для триггера 
+// Назначаем токены для триггера 
 $nameTrigger->setTokens(['давай','хочу','может'],['знакомиться','познакомиться','представлюсь']);
 
-//Привязываем следующие триггеры
+// Привязываем следующие триггеры
 $nameTrigger->nextDelegate($sNameTrigger);
 $sNameTrigger->nextDelegate($yoTrigger);
 $yoTrigger->nextDelegate($personTrigger);
+
+// Обрабочтик запроса. Сработает если пользователь произнес "Давай познакомимся"
+$bot->sendResponse($nameTrigger,static function() use ($bot){
+    $answer = new Response();
+    $answer->addText('Какое твое имя?');
+    return $answer;
+});
+
+// После шага $nameTrigger сработает обработчик $sNameTrigger
+$bot->sendResponse($sNameTrigger,static function() use ($bot){
+    $answer = new Response();
+    $answer->addText('А фамилия?');
+    return $answer;
+});
+
+// После шага $sNameTrigger сработает обработчик $yoTrigger
+$bot->sendResponse($yoTrigger,static function() use ($bot){
+    $answer = new Response();
+    $answer->addText('Сколько тебе лет?');
+    return $answer;
+});
+
 ```
 Для каждого из триггеров нужно создать обработчик с вопросом. При запросе пользователя "Ну давай познакомимся" сработает триггер $nameTrigger. Для триггеров $sNameTrigger и $yoTrigger токены не нужны (в общем то в данном случае они и не смогут сработать, тк пользотваель будет передавать информацию, и в ней нельзя распознать команду), они будут вызваны автоматически друг за другом.
 

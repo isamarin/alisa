@@ -91,9 +91,9 @@ class SessionStorage
 
     /**
      * @param $trigger
-     * @return |null |null |null |null |null
+     * @return string|null
      */
-    public function getTriggerData($trigger)
+    public function getTriggerData($trigger): ?string
     {
         return $this->data[self::TRIGGER][$trigger] ?? null;
     }

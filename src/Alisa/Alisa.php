@@ -54,8 +54,6 @@ class Alisa
         $this->storage = new SessionStorage($this->request);
         $this->directionType = DirectionType::BACKWARD;
         $this->alghoritm = new MorphyRecognition();
-        $this->sessionPath = $_SERVER['DOCUMENT_ROOT'] . '/sessions/';
-        $this->dictsPath = $_SERVER['DOCUMENT_ROOT'] . '/dicts/';
     }
 
     /**
@@ -206,7 +204,7 @@ class Alisa
 
     protected function sendHelp(): void
     {
-        $answer = new Response($this->recognizedCommand);
+        $answer = new Response();
         $answer->addText('Приветствую! Бот запущен, но не настроены стандратные триггеры.');
 
         $button = new Button('Что такое стандартные триггеры?');

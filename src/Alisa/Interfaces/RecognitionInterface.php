@@ -14,8 +14,8 @@ interface RecognitionInterface
 {
     /**
      * @param Request $request
-     * @param TriggerIterator $trigger
+     * @param TriggerIterator $iterator
      * @return Trigger
      */
-    public function rateSimilarities(Request $request, TriggerIterator $trigger): Trigger;
+    public function rateSimilarities(Request $request, TriggerIterator $iterator): Trigger;
 }

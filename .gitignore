@@ -9,12 +9,11 @@ Thumbs.db
 !tests
 !composer.json
 *
-!/src
-!/tests
-!/src/**
-!/tests/**
 !/composer.json
 !/.gitignore
 !/composer.lock
 /composer.lock
 !/README.md
+/src
+/src/*
+/composer.json

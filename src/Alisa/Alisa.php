@@ -13,6 +13,7 @@ use function in_array;
  */
 class Alisa
 {
+    public const YANDEX_RESPONSE = 'response';
     /** @var TriggerIterator $triggers */
     protected $triggers = [];
     /** @var Trigger $recornizedCommand */
@@ -60,7 +61,7 @@ class Alisa
      * Путь до морфологического словаря
      * @param $path
      */
-    public function setDictionaryPath($path)
+    public function setDictionaryPath($path): void
     {
         $GLOBALS['DICTS_PATH'] = $path;
     }
@@ -69,14 +70,16 @@ class Alisa
      * Путь сохранения сессий
      * @param $path
      */
-    public function setSessionsPath($path)
+    public function setSessionsPath($path): void
     {
         $GLOBALS['SES_PATH'] = $path;
     }
 
 
     /**
+     * Устаналивает выбранный алгоритм распозования
      * @param RecognitionInterface $algorithm
+     * @see MorphyRecognition по умолчанию
      */
     public function setAlgorithm(RecognitionInterface $algorithm): void
     {
@@ -180,19 +183,19 @@ class Alisa
         } elseif ($this->recognizedCommand) {
             $replaced = null;
             if ($this->directionType === DirectionType::BACKWARD) {
-                $replaced = $this->storage->getPreviousTrigger()['NAME'];
+                $replaced = $this->storage->getPreviousTrigger()[SessionStorage::NAME];
                 if ($this->triggers->getByName($replaced)->isDefault()) {
                     $replaced = null;
                 }
             }
             if ($this->request->isButtonClick()) {
-                $utterance = $this->request->getPayloadData()['TITLE'];
+                $utterance = $this->request->getPayloadData()[Button::TITLE];
 
-                if (isset($this->request->getPayloadData()['ATTACH'])) {
-                    $replaced = $this->request->getPayloadData()['ATTACH'];
+                if (isset($this->request->getPayloadData()[Button::ATTACH])) {
+                    $replaced = $this->request->getPayloadData()[Button::ATTACH];
                 }
-                if (isset($this->request->getPayloadData()['services']['keepdata'])) {
-                    $utterance = $this->request->getPayloadData()['services']['keepdata'];
+                if (isset($this->request->getPayloadData()[Button::SERVICES][Paginator::KEEPDATA])) {
+                    $utterance = $this->request->getPayloadData()[Button::SERVICES][Paginator::KEEPDATA];
                     $replaced = null;
                 }
             }
@@ -212,17 +215,20 @@ class Alisa
         $button->setHide(true);
 
         $button2 = new Button('Посмотреть пример реализации');
-        $button2->addLink('');
+        $button2->addLink('https://github.com/isamarin/alisa/tree/exmaple/');
         $button2->setHide(true);
 
 
         $answer->addButton($button, $button2);
         $response = $this->request->getServiceData();
-        $response['response'] = $answer->send($this->recognizedCommand);
+        $response[self::YANDEX_RESPONSE] = $answer->send($this->recognizedCommand);
         die(json_encode($response));
     }
 
     /**
+     * TODO понять как это редъюсить
+     * мб разбить на методы?
+     *
      * @return bool
      */
     protected function getCommand(): bool
@@ -236,29 +242,29 @@ class Alisa
         /* Проверяем клик ли это на кнопку */
         if ($this->request->isButtonClick()) {
             $button = $this->request->getPayloadData();
-            if (array_key_exists('NAME', $button)) {
+            if (array_key_exists(Button::NAME, $button)) {
                 $this->recognizedCommand = $this->triggers
-                    ->getByName($this->request->getPayloadData()['NAME']);
+                    ->getByName($this->request->getPayloadData()[Button::NAME]);
             } else {
                 $this->recognizedCommand = $this->triggers->getDefaultTrigger();
                 $this->storage->setTriggerData($this->storage->getPreviousTrigger(), $this->request->getUtterance());
             }
-            if (array_key_exists('ASSIGN', $button)) {
-                $this->storage->setTriggerData($button['ASSIGN'], $button['TITLE']);
+            if (array_key_exists(Button::ASSIGN, $button)) {
+                $this->storage->setTriggerData($button[Button::ASSIGN], $button[Button::TITLE]);
             }
             return true;
         }
 
         if ($this->request->isSubstitued()) {
-            $this->recognizedCommand = $this->triggers->getByName($this->request->isSubstitued()['to']);
+            $this->recognizedCommand = $this->triggers->getByName($this->request->isSubstitued()[Request::SUBSTITUTED_TO]);
             return true;
         }
 
 
         /** @var array $arPreviousTrigger */
         $arPreviousTrigger = $this->storage->getPreviousTrigger();
-        if ($arPreviousTrigger && isset($arPreviousTrigger['NEXT'])) {
-            $this->recognizedCommand = $this->triggers->getByName($arPreviousTrigger['NEXT']);
+        if ($arPreviousTrigger && isset($arPreviousTrigger[SessionStorage::NEXT])) {
+            $this->recognizedCommand = $this->triggers->getByName($arPreviousTrigger[SessionStorage::NEXT]);
             return true;
         }
 
@@ -290,12 +296,12 @@ class Alisa
      */
     public function isRepeatedRequest(): bool
     {
-        if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()['NEXT'])
-            && $this->storage->getPreviousTrigger()['NEXT'] === $this->recognizedCommand->getName()
-            && $this->recognizedCommand->getName() === $this->storage->getPreviousTrigger()['NAME']) {
+        if ($this->recognizedCommand && isset($this->storage->getPreviousTrigger()[SessionStorage::NEXT])
+            && $this->storage->getPreviousTrigger()[SessionStorage::NEXT] === $this->recognizedCommand->getName()
+            && $this->recognizedCommand->getName() === $this->storage->getPreviousTrigger()[SessionStorage::NAME]) {
             return true;
         }
-        if (isset($this->request->getPayloadData()['services']['repeat']) && $this->request->getPayloadData()['services']['repeat']) {
+        if (isset($this->request->getPayloadData()[Button::SERVICES][Paginator::REPEAT]) && $this->request->getPayloadData()[Button::SERVICES][Paginator::REPEAT]) {
             return true;
         }
         return false;
@@ -332,7 +338,7 @@ class Alisa
                 $answer->serviceActions($this->request->getPayloadData(), $this->recognizedCommand,
                     $this->storage->getTriggerData($this->recognizedCommand->getName()));
             }
-            $response['response'] = $answer->send($this->recognizedCommand);
+            $response[self::YANDEX_RESPONSE] = $answer->send($this->recognizedCommand);
             $this->storage->save();
             die(json_encode($response));
         }
@@ -374,7 +380,7 @@ class Alisa
         $answer = new Response();
         $answer->addText('Внутренняя ошибка');
         $response = $this->request->getServiceData();
-        $response['response'] = $answer->send($this->recognizedCommand);
+        $response[self::YANDEX_RESPONSE] = $answer->send($this->recognizedCommand);
         trigger_error('Невернная передача триггер - триггер');
         if ($saveCurrentSession) {
             $this->storage->save();
@@ -443,7 +449,7 @@ class Alisa
     }
 
     /**
-     * Возвращает данные, которые были вставлены в боте
+     * Возвращает данные, которые были установлены в боте вручную
      * @param $key
      * @return null|string
      * @see Alisa::storeCommonData()
@@ -460,6 +466,6 @@ class Alisa
      */
     public function isPaginatorCall(): bool
     {
-        return isset($this->request->getPayloadData()['services']['topage']);
+        return isset($this->request->getPayloadData()[Button::SERVICES][Paginator::TOPAGE]);
     }
 }

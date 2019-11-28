@@ -1,7 +1,6 @@
 <?php
 
 namespace isamarin\Alisa;
-
 use function array_slice;
 use function count;
 
@@ -14,12 +13,14 @@ class Paginator
     protected $links = [];
     protected $buttons = [];
     protected $payload;
-
     protected $limit;
     protected $topage;
-    protected $current;
     protected $prevTrigger;
     protected $keepData;
+
+    public const TOPAGE = 'topage';
+    public const KEEPDATA = 'keepdata';
+    public const REPEAT = 'repeat';
 
 
     /**
@@ -33,8 +34,8 @@ class Paginator
         $this->keepData = $keepPreviosData;
         $this->payload = $requestPayload;
         $this->prevTrigger = $prevTrigger;
-        if (isset($this->payload['services'])) {
-            $this->topage = $this->payload['services']['topage'];
+        if (isset($this->payload[Button::SERVICES])) {
+            $this->topage = $this->payload[Button::SERVICES]['topage'];
         }
     }
 
@@ -51,10 +52,10 @@ class Paginator
      */
     public function append(Button $button): void
     {
-        if ($button->get()['hide'] === false) {
-            $this->links[] = $button;
-        } else {
+        if ($button->get()[Button::YANDEX_HIDE] !== false) {
             $this->buttons[] = $button;
+        } else {
+            $this->links[] = $button;
         }
     }
 
@@ -87,9 +88,9 @@ class Paginator
                 $back->linkTrigger($this->prevTrigger);
                 $back->setHide(false);
                 $back->addPayload([
-                    'topage' => $this->topage - 1,
-                    'keepdata' => $this->keepData,
-                    'repeat' => true,
+                    self::TOPAGE => $this->topage - 1,
+                    self::KEEPDATA => $this->keepData,
+                    self::REPEAT => true,
                 ]);
                 $this->links[] = $back;
             }
@@ -99,9 +100,9 @@ class Paginator
                 $more->linkTrigger($this->prevTrigger);
                 $more->setHide(false);
                 $more->addPayload([
-                    'topage' => $this->topage + 1,
-                    'keepdata' => $this->keepData,
-                    'repeat' => true,
+                    self::TOPAGE => $this->topage + 1,
+                    self::KEEPDATA => $this->keepData,
+                    self::REPEAT => true,
                 ]);
                 $this->links[] = $more;
             }

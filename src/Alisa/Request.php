@@ -18,6 +18,11 @@ class Request implements Interfaces\RequestInterface
     protected const SESSION = 'session';
     protected const REQUEST = 'request';
     protected const VERSION = '1.0';
+    public const SUBSTITUTED_TO = 'to';
+    public const SUBSTITUTED_FROM = 'from';
+    public const SUBSTITUTED = 'substituted';
+
+
     private static $sessionID;
     private static $clientID;
     private static $messageID;
@@ -39,7 +44,6 @@ class Request implements Interfaces\RequestInterface
     {
         if ( ! $data) {
             $this->rawRequest = json_decode(file_get_contents('php://input'), true);
-            unset($data);
         }
 
 
@@ -225,8 +229,8 @@ class Request implements Interfaces\RequestInterface
      */
     final public function makeSubstitued($fromTriggerName, $toTriggerName): void
     {
-        $this->rawRequest['substituted']['from'] = $fromTriggerName;
-        $this->rawRequest['substituted']['to'] = $toTriggerName;
+        $this->rawRequest[self::SUBSTITUTED][self::SUBSTITUTED_FROM] = $fromTriggerName;
+        $this->rawRequest[self::SUBSTITUTED][self::SUBSTITUTED_TO] = $toTriggerName;
         $gClient = new Client();
         $response = $gClient->post('https://' . $_SERVER['HTTP_HOST'], [
             RequestOptions::JSON => $this->rawRequest,

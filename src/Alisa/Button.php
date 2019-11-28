@@ -19,23 +19,32 @@ class Button
     protected $assign;
     protected $attach = false;
 
+    public const PAYLOAD = 'payload';
+    public const TITLE = 'TITLE';
+    public const ASSIGN = 'ASSIGN';
+    public const ATTACH = 'ATTACH';
+    public const NAME = 'NAME';
+
+    public const YANDEX_HIDE = 'hide';
+    public const YANDEX_TITLE = 'title';
+    public const YANDEX_LINK = 'link';
+
+    public const SERVICES = 'services';
+
+
     /**
      * Button constructor.
      * @param string $title
      * @param bool $hide
      */
-    public function __construct(string $title = 'untitled', $hide = true)
+    public function __construct(string $title = 'untitled', $hide = null)
     {
         if ($title) {
             $this->title = $title;
         }
-        $this->hide = $hide;
+        $this->hide = $hide ?? true;
     }
 
-    /**
-     * TODO
-     * FIX LINKS
-     */
     /**
      * Устанавливает URL к кнопке
      * @param string $link
@@ -50,6 +59,7 @@ class Button
     }
 
     /**
+     * Устанавливает заголовок для кнопки. Может быть передан через конструктор.
      * @param string $title
      * @return Button
      */
@@ -62,6 +72,9 @@ class Button
     }
 
     /**
+     * Устанавливает тип кнопки. Внизу как кнопка, или в сообщении как ссылка.
+     * Если true – значит кнопка. false – ссылка
+     * Может быть установлено через конструктор
      * @param bool $hide
      * @return Button
      */
@@ -79,14 +92,16 @@ class Button
     public function linkTrigger(Trigger $trigger): Button
     {
         if ($trigger->isValid()) {
-            $this->trigger['NAME'] = $trigger->getName();
+            $this->trigger[self::NAME] = $trigger->getName();
         }
         return $this;
     }
 
     /**
+     * Переопределяет принадлежность данных, полученных с кнопки другому тригеру
      * @param Trigger $trigger
      * @return Button
+     * @see Button::linkTrigger()
      */
     public function assignDataTo(Trigger $trigger): Button
     {
@@ -110,41 +125,44 @@ class Button
      */
     public function addPayload($payload): Button
     {
-        $this->trigger['services'] = $payload;
+        $this->trigger[self::SERVICES] = $payload;
         return $this;
     }
 
     /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return http_build_query($this->get());
-    }
-
-    /**
      * @return array
+     * @internal Используется при отправки кнопки Яндексу
      */
     public function get(): array
     {
         $res = [];
-        $res['title'] = $this->title;
+        $res[self::YANDEX_TITLE] = $this->title;
         if ($this->trigger) {
-            $res['payload'] = $this->trigger;
+            $res[self::PAYLOAD] = $this->trigger;
         }
-        $res['payload']['TITLE'] = $this->title;
+        $res[self::PAYLOAD][self::TITLE] = $this->title;
         if ($this->link) {
-            $res['link'] = $this->link;
+            $res[self::YANDEX_LINK] = $this->link;
         }
         if ($this->attach) {
-            $res['payload']['ATTACH'] = $this->attach;
+            $res[self::PAYLOAD][self::ATTACH] = $this->attach;
         }
         if ($this->assign) {
-            $res['payload']['ASSIGN'] = $this->assign;
+            $res[self::PAYLOAD][self::ASSIGN] = $this->assign;
         }
-        $res['hide'] = $this->hide;
+        $res[self::YANDEX_HIDE] = $this->hide;
 
         return $res;
+    }
+
+    /**
+     * Возврашает string представление результата get
+     * @return string
+     * @see Button::get()
+     */
+    public function __toString()
+    {
+        return http_build_query($this->get());
     }
 
 }

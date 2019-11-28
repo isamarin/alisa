@@ -12,10 +12,10 @@ class SessionStorage
 {
     protected const TRIGGER = 'trigger';
     protected const SESSION = 'sessions';
-    protected const REQUEST = 'request';
     protected const COMMON = 'common';
     protected const DATA = 'data';
-    protected const ALLOWED = 'allowed_class';
+    public const NAME = 'NAME';
+    public const NEXT = 'NEXT';
     protected $dir;
     /**
      * @var Request $request
@@ -72,10 +72,10 @@ class SessionStorage
      */
     public function storeTrigger(Trigger $trigger, $data, $replaceTrigger = null): void
     {
-        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NAME'] = $trigger->getName();
+        $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER][self::NAME] = $trigger->getName();
         $this->data[self::SESSION][$this->request->getMessageID()][self::DATA] = $data;
         if ($trigger->hasNextTrigger()) {
-            $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER]['NEXT'] = $trigger->getNextTrigger()->getName();
+            $this->data[self::SESSION][$this->request->getMessageID()][self::TRIGGER][self::NEXT] = $trigger->getNextTrigger()->getName();
         }
         $this->data[self::TRIGGER][$trigger->getName()] = $data;
         if ($replaceTrigger) {

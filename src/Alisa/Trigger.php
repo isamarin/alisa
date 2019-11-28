@@ -28,10 +28,10 @@ class Trigger
 
     /**
      * Устаналивает группу слов синонимов
-     * @param array ...$tokens
+     * @param array $tokens
      * @return Trigger
      */
-    public function linkTokens(array ...$tokens): Trigger
+    public function linkTokens(...$tokens): Trigger
     {
         foreach ($tokens as $tokenGroup) {
             $out = [];
@@ -44,7 +44,9 @@ class Trigger
     }
 
     /**
+     * Возвращает коллекцию группу слов синонимов
      * @return array
+     * @see Trigger::linkTokens()
      */
     public function getTokens(): array
     {
@@ -97,7 +99,9 @@ class Trigger
     }
 
     /**
+     * Возвращает триггер, которому будет делегирована передача
      * @return Trigger
+     * @see Trigger::nextDelegate()
      */
     public function getNextTrigger(): Trigger
     {
@@ -105,7 +109,9 @@ class Trigger
     }
 
     /**
+     * Возвращает флаг, имеет ли триггер делегата
      * @return bool
+     * @see Trigger::nextDelegate()
      */
     public function hasNextTrigger(): bool
     {
@@ -156,7 +162,9 @@ class Trigger
     }
 
     /**
+     * Возвращает флаг, является ли данный триггер по-умолчанию
      * @return bool
+     * @see Trigger::setAsDefault()
      */
     public function isDefault(): bool
     {
@@ -164,7 +172,9 @@ class Trigger
     }
 
     /**
+     * Возвращает флаг, является ли данный обработчиком ошибки распознования
      * @return bool
+     * @see Trigger::setAsMistake()
      */
     public function isMistake(): bool
     {
@@ -172,7 +182,9 @@ class Trigger
     }
 
     /**
+     * Возвращает флаг, является ли данный триггер приветсвующим
      * @return bool
+     * @see Trigger::setAsInit()
      */
     public function isInit(): bool
     {

@@ -12,6 +12,8 @@ class Response
     private $buttons = [];
     private $paginatorLength;
     private $recognized;
+    public const YANDEX_TEXT = 'text';
+    public const YANDEX_TTS = 'tts';
 
     /**
      * Response constructor.
@@ -31,11 +33,11 @@ class Response
     {
         $answer = [];
         if ($text) {
-            $answer['text'] = $text;
+            $answer[self::YANDEX_TEXT] = $text;
             if ($tts) {
-                $answer['tts'] = $tts;
+                $answer[self::YANDEX_TTS] = $tts;
             } else {
-                $answer['tts'] = $text;
+                $answer[self::YANDEX_TTS] = $text;
             }
             $this->answers[] = $answer;
         }
@@ -140,8 +142,8 @@ class Response
         foreach ($this->buttons as $button) {
             /** @var Button $button */
             $raw = $button->get();
-            if (isset($raw['payload']['ATTACH']) && $raw['payload']['ATTACH'] === true) {
-                $raw['payload']['ATTACH'] = $recognized->getName();
+            if (isset($raw[Button::PAYLOAD][Button::ATTACH]) && $raw[Button::PAYLOAD][Button::ATTACH] === true) {
+                $raw[Button::PAYLOAD][Button::ATTACH] = $recognized->getName();
             }
             $rawButtons[] = $raw;
         }

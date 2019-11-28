@@ -17,3 +17,5 @@ Thumbs.db
 /src
 /src/*
 /composer.json
+!/www/bashorg.php
+!/www
